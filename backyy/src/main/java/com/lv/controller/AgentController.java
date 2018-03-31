@@ -8,12 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 
 * @className : AgentController.java
-* @Description : 浠ｇ悊鍟嗚〃
-* @author 锛� Administrator  
-* @date : 2018骞�3鏈�31鏃�
- */
+* @Description : 代理表
+* @author ： Administrator  
+* @date : 2018年3月31日   
+*/
 @Scope("prototype")
 @Controller
 @RequestMapping("/Agent")
