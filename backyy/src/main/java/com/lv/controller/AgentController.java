@@ -19,5 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/Agent")
 public class AgentController extends BaseController {
 	private String name = "asdf";
+	private String pass = "asdf";
 
 }
