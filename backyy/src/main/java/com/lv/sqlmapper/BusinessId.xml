@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BusinessId">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select bd.*,bp.pro_name from business_id bd
+		left join busi_product bp on bd.deal_type = bp.pro_no
+		WHERE 1=1
+		<if test="params.deal_type!=null and params.deal_type!=''">
+			and bd.deal_type = '${params.deal_type}'
+		</if>
+		<if test="params.mch_id!=null and params.mch_id!=''">
+			and bd.mch_id = '${params.mch_id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.BusinessId" parameterType="int">
+		select * from business_id where id=#{id}
+	</select>
+	<insert id="insert">
+	insert into business_id(mch_id,status,buss_id,service,deal_type)
+	 values(#{mch_id},#{status},#{buss_id},#{service},#{deal_type})
+	</insert>
+	<update id="update"  parameterType="int">
+	update business_id set status=#{status},buss_id=#{buss_id},deal_type=#{deal_type} where id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from business_id where id=#{id}
+	</delete>
+	<select id="getBusinessId" resultType="com.lv.entity.BusinessId" parameterType="map">
+		select * from business_id where id=#{id}
+	</select>
+	<select id="getAllBusinessId" resultType="com.lv.entity.BusinessId" parameterType="com.lv.entity.BusinessId">
+		select * from business_id where deal_type = #{deal_type} and mch_id = #{mch_id}
+	</select>
+</mapper> 
+

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DealDate">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT * FROM (SELECT SUM(dr.amount) amn,COUNT(dr.serial) cnt,MAX(dr.amount) mamn,MIN(dr.amount) miamn, dr.deal_date,bp.pro_name FROM deal_record dr 
+		LEFT JOIN busi_product bp on dr.deal_type  = bp.pro_no
+		WHERE 1=1 AND dr.status = 0
+		<if test="params.deal_type!=null and params.deal_type!=''">
+			and dr.deal_type = '${params.deal_type}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and dr.deal_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		GROUP BY dr.deal_date,dr.deal_type ) be
+	</select>
+	<select id="getOne" resultType="com.lv.entity.DealDate" parameterType="int">
+		select * from deal_date where Id=#{id}
+	</select>
+	<!-- 查询最大日期 -->
+	<select id="getmaxdate" resultType="String" >
+		SELECT MAX(deal_date) date FROM deal_date
+	</select>
+	<insert id="insert">
+	insert into deal_date(amount,clear_amount,net_profit,gross_profit,add_date,agent_profit,count_num,deal_date)
+	 values(#{amount},#{clear_amount},#{net_profit},#{gross_profit},#{add_date},#{agent_profit},#{count_num},#{deal_date})
+	</insert>
+	<update id="update"  parameterType="int">
+	update deal_date set amount=#{amount},clear_amount=#{clear_amount},net_profit=#{net_profit},gross_profit=#{gross_profit},add_date=#{add_date},agent_profit=#{agent_profit},count_num=#{count_num},deal_date=#{deal_date} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from deal_date where Id=#{id}
+	</delete>
+	<!-- 汇总求和 -->
+	<select id="getcountList" resultType="map" parameterType="Page">
+		SELECT SUM(amount) ant,SUM(clear_amount) cant, SUM(gross_profit) pro,SUM(net_profit) npro,SUM(count_num) num,SUM(agent_profit) apro FROM deal_date where 1=1
+			<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			and deal_date <![CDATA[>= ]]> '${begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="endtime!=null and endtime!=''">
+			and deal_date <![CDATA[<= ]]> '${endtime}'
+		</if>
+	</select>
+</mapper> 
+

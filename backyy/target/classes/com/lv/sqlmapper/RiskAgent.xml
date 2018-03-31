@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RiskAgent">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from risk_agent where 1=1
+		<if test="params.id!=null and params.id!=''">
+			and Id = '${params.id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.RiskAgent" parameterType="int">
+		select * from risk_agent where id=#{id}
+	</select>
+	<insert id="insert">
+	insert into risk_agent(endtime,starttime,singlepenlimitamount,singlecapamount,daylimitamount,d0_startamount,client_daylimitamount,d0_occupies,tradetype,agent_daylimitamount,startdate,t_daylimitamount,t_singlepenlimitamount,agent_no,enddate,d0_endamount,t_singlecapamount)
+	 values(#{endtime},#{starttime},#{singlepenlimitamount},#{singlecapamount},#{daylimitamount},#{d0_startamount},#{client_daylimitamount},#{d0_occupies},#{tradetype},#{agent_daylimitamount},#{startdate},#{t_daylimitamount},#{t_singlepenlimitamount},#{agent_no},#{enddate},#{d0_endamount},#{t_singlecapamount})
+	</insert>
+	<update id="update"  parameterType="int">
+	update risk_agent set endtime=#{endtime},starttime=#{starttime},singlepenlimitamount=#{singlepenlimitamount},status=#{status},singlecapamount=#{singlecapamount},daylimitamount=#{daylimitamount},d0_startamount=#{d0_startamount},client_daylimitamount=#{client_daylimitamount},d0_occupies=#{d0_occupies},tradetype=#{tradetype},agent_daylimitamount=#{agent_daylimitamount},startdate=#{startdate},t_daylimitamount=#{t_daylimitamount},t_singlepenlimitamount=#{t_singlepenlimitamount},agent_no=#{agent_no},enddate=#{enddate},d0_endamount=#{d0_endamount},t_singlecapamount=#{t_singlecapamount} where id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from risk_agent where id=#{id}
+	</delete>
+	<update id="updateStatus"  parameterType="map"  >
+		update risk_agent set status =#{status} where id = #{id}
+	</update>
+</mapper> 
+

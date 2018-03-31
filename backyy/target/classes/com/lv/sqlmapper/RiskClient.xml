@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RiskClient">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from risk_client where 1=1
+		<if test="params.id!=null and params.id!=''">
+			and id = '${params.id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.RiskClient" parameterType="int">
+		select * from risk_client where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into risk_client(endtime,starttime,singlepenlimitamount,singlecapamount,daylimitamount,client_no,client_daylimitamount,tradetype,startdate,t_daylimitamount,t_singlepenlimitamount,enddate,t_singlecapamount)
+	 values(#{endtime},#{starttime},#{singlepenlimitamount},#{singlecapamount},#{daylimitamount},#{client_no},#{client_daylimitamount},#{tradetype},#{startdate},#{t_daylimitamount},#{t_singlepenlimitamount},#{enddate},#{t_singlecapamount})
+	</insert>
+	<update id="update"  parameterType="int">
+	update RiskClient set endtime=#{endtime},starttime=#{starttime},singlepenlimitamount=#{singlepenlimitamount},status=#{status},singlecapamount=#{singlecapamount},daylimitamount=#{daylimitamount},client_no=#{client_no},client_daylimitamount=#{client_daylimitamount},tradetype=#{tradetype},startdate=#{startdate},t_daylimitamount=#{t_daylimitamount},t_singlepenlimitamount=#{t_singlepenlimitamount},enddate=#{enddate},t_singlecapamount=#{t_singlecapamount} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from risk_client where id=#{id}
+	</delete>
+	<!-- 修改状态 -->
+	<update id="updateStatus"  parameterType="map">
+		update risk_client set status=#{status} where id=#{id}
+	</update>
+</mapper> 
+

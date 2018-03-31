@@ -1,0 +1,1 @@
+<img src = "../public/login/images/404.png" style = "width:230px;"/>

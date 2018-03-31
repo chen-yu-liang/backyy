@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Cache">
+	<!-- 查询基础信息 -->
+	<select id="baseinfo" resultType="map" parameterType="String">
+		select info AS INFO,info_en as INFO_EN,class_en as CLASS_EN from baseinfo where class_en=#{class_en} and status = 1
+	</select>
+	<select id="baseinfoClass" resultType="map" parameterType="String">
+		select class_en as "CLASS_EN",class_cn as "CLASS_CN" from baseinfo_class where class_en=#{class_en} and status = 1
+	</select>
+	<!-- 获取总后台所有菜单 -->
+	<select id="getCarte" resultType="map">
+		select * from carte where belong_terrace = 0 order by parent_id
+	</select>
+	<!-- 获取代理商所有菜单 -->
+	<select id="getAgentCarte" resultType="map">
+		select * from carte where belong_terrace = 1 order by parent_id
+	</select>
+		<!-- 获取财务平台所有菜单 -->
+	<select id="getFinanceCarte" resultType="map">
+		select * from carte where belong_terrace = 2 order by parent_id
+	</select>
+	<!-- 查询用户菜单 -->
+	<select id="selectUserCarte" resultType="map" parameterType="String">
+		${value}
+	</select>
+	<!-- 查询用户按钮 -->
+	<select id="selectUserBtn" resultType="map" parameterType="String">
+		${value}
+	</select>
+</mapper> 
+

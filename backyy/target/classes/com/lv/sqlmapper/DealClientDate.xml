@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DealClientDate">
+	<select id="getPageList" resultType="map" parameterType="Page">
+			SELECT * FROM (SELECT SUM(dr.amount) amn,COUNT(dr.serial) cnt,MAX(dr.amount) mamn,MIN(dr.amount) miamn, dr.deal_date,cp.id,cp.name FROM deal_record dr 
+			LEFT JOIN channel_details cd ON dr.bid = cd.c_id
+			LEFT JOIN channel_parent cp ON cp.id = cd.c_pid
+			where 1=1 and dr.status = 0
+		<if test="params.id!=null and params.id!=''">
+			and cp.id=#{params.id}
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and dr.deal_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+			GROUP BY cp.id,dr.deal_date ) be
+	</select>
+	<select id="getOne" resultType="com.lv.entity.DealClientDate" parameterType="int">
+		select * from deal_client_date where Id=#{id}
+	</select>
+	<!-- 查询最大日期 -->
+	<select id="getClientmaxdate" resultType="String" >
+		SELECT MAX(deal_date) date FROM deal_client_date
+	</select>
+	<insert id="insert">
+	insert into deal_client_date(amount,clear_amount,net_profit,gross_profit,add_date,client_no,agent_no,agent_profit,count_num,deal_date)
+	 values(#{amount},#{clear_amount},#{net_profit},#{gross_profit},#{add_date},#{client_no},#{agent_no},#{agent_profit},#{count_num},#{deal_date})
+	</insert>
+	<update id="update"  parameterType="int">
+	update deal_client_date set amount=#{amount},clear_amount=#{clear_amount},net_profit=#{net_profit},gross_profit=#{gross_profit},add_date=#{add_date},client_no=#{client_no},agent_no=#{agent_no},agent_profit=#{agent_profit},count_num=#{count_num},deal_date=#{deal_date} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from deal_client_date where Id=#{id}
+	</delete>
+	<!-- 商户汇总 -->
+	<select id="getcountList" resultType="map" parameterType="Page">
+		SELECT SUM(amount) ant,SUM(clear_amount) cant, SUM(gross_profit) pro,SUM(net_profit) npro,SUM(count_num) num,SUM(agent_profit) apro FROM deal_client_date dc
+		LEFT JOIN client_base c ON dc.client_no=c.client_no
+		LEFT JOIN accounts ac ON dc.client_no=ac.object_id
+		LEFT JOIN agent a ON dc.agent_no=a.agent_no
+		where 1=1
+		<if test="client_no!=null and client_no!=''">
+			and dc.client_no=#{client_no}
+		</if>
+		<if test="client_name!=null and client_name!=''">
+			and c.client_name like '%${client_name}%'
+		</if>
+		<if test="account_name!=null and account_name!=''">
+			and ac.account_name like '%${account_name}%'
+		</if>
+		<if test="agent_name!=null and agent_name!=''">
+			and a.agent_name like '%${agent_name}%'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			and dc.deal_date <![CDATA[>= ]]> '${begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="endtime!=null and endtime!=''">
+			and dc.deal_date <![CDATA[<= ]]> '${endtime}'
+		</if>
+	</select>
+</mapper> 
+

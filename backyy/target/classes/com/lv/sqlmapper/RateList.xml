@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RateList">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from rate_list where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.RateList" parameterType="int">
+		select * from rate_list where id=#{id}
+	</select>
+	<select id="getArateList" resultType="com.lv.entity.RateList" parameterType="com.lv.entity.RateList">
+		select * from rate_list where rate_no=#{rate_no} and product_type=#{product_type} and rate_type=#{rate_type}
+	</select>
+	<insert id="insert">
+	insert into rate_list(object_no,rate_type,rate_no,product_type,add_time,add_user)
+	 values(#{object_no},#{rate_type},#{rate_no},#{product_type},#{add_time},#{add_user})
+	</insert>
+	<update id="update"  parameterType="int">
+	update rate_list set rate_type=#{rate_type},rate_no=#{rate_no},product_type=#{product_type} where id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from rate_list where id=#{id}
+	</delete>
+</mapper> 
+

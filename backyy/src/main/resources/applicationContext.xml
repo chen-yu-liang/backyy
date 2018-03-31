@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	
+	<!-- 引入jdbc配置文件 -->
+	<context:property-placeholder location="classpath:dataSource.properties" />
+
+	<!--创建jdbc数据源 -->
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" -->
+	<!-- destroy-method="close"> -->
+	<!-- <property name="driverClassName" value="${driver}" /> -->
+	<!-- <property name="url" value="${url}" /> -->
+	<!-- <property name="username" value="${username}" /> -->
+	<!-- <property name="password" value="${password}" /> -->
+	<!-- <property name="maxActive"><value>20</value></property> -->
+	<!-- <property name="initialSize"><value>1</value></property> -->
+	<!-- <property name="maxWait"><value>60000</value></property> -->
+	<!-- <property name="maxIdle"><value>20</value></property> -->
+	<!-- <property name="minIdle"><value>3</value></property> -->
+	<!-- <property name="removeAbandoned"><value>true</value></property> -->
+	<!-- <property name="removeAbandonedTimeout"><value>180</value></property> -->
+	<!-- <property name="testWhileIdle" value="true" /> -->
+	<!-- <property name="testOnBorrow" value="false" /> -->
+	<!-- <property name="testOnReturn" value="false" /> -->
+	<!-- <property name="validationQuery" value="select 1" /> -->
+	<!-- <property name="timeBetweenEvictionRunsMillis"><value>30000</value></property> -->
+	<!-- <property name="numTestsPerEvictionRun"><value>20</value></property> -->
+	<!-- </bean> -->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="0" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="20" />
+
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="0" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="60000" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+			value="33" />
+		<!-- 用来检测有效sql -->
+		<property name="validationQuery" value="${validationQuery}" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="testWhileIdle" value="true" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="25200000" />
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+		<!-- 监控数据库 -->
+		<property name="filters" value="mergeStat" />
+	</bean>
+
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+
+	<!-- 创建SqlSessionFactory，同时指定数据源 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- <property name="mapperLocations" value="classpath*:com/lv/sqlmapper/**"/> -->
+		<property name="configLocation" value="classpath:com/lv/sqlmapper/sqlMapConfig.xml" />
+		<!-- <property name="mapperLocations" value="classpath*:com/lv/sqlmapper/**" 
+			/> -->
+		<!-- <value>classpath:com/lv/sqlmapper/sqlMapConfig.xml</value> -->
+		<!-- </property> -->
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 注入SqlSessionTemplate实例 -->
+	<bean id="baseDaoImpl" class="com.lv.dao.impl.BaseDaoImpl">
+		<property name="sqlSessionTemplate" ref="sqlSession" />
+	</bean>
+	<!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+	<!-- <property name="basePackage" value="com.lv.dao"></property> -->
+	<!-- <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property> -->
+	<!-- </bean> -->
+
+
+	<!-- 可通过注解控制事务 -->
+	<!-- <tx:annotation-driven /> -->
+
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:advisor pointcut="execution(* com.lv.controller..*.*(..))"
+			advice-ref="transactionAdvice" />
+	</aop:config>
+
+	<aop:config proxy-target-class="true" />
+
+	<!-- 设置SPRING AOP动态捕获异常 1设定为自动代理 2负责记录有异常发生时的信息 3 对指定类的任何方法有效 -->
+	<bean id="autoProxyCreator"
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
+	<bean id="exceptionHandler" class="com.lv.util.AopExceptionHandler" />
+	<!-- 这里配置切入点，可以为正则表达式 .*DAOImpl\.delete.* -->
+	<bean id="exceptionHandlereAdvisor"
+		class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice">
+			<ref bean="exceptionHandler" />
+		</property>
+		<property name="patterns">
+			<list>
+				<!-- 切入包名中含impl字符的类主要为了捕获实现接口的类 -->
+				<value>.*Controller*.*</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Mapper接口所在包名，Spring会自动查找其下的Mapper MapperScanner配置.自动去搜索mapper里的对象,并注入. -->
+	<!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+	<!-- <property name="basePackage" value="com.lv.dao.*" /> -->
+	<!-- </bean> -->
+
+	<!-- 文件上传配置 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+
+</beans>

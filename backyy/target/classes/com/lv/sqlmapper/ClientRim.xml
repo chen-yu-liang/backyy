@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientRim">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from client_rim where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and client_no = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ClientRim" parameterType="int">
+		select * from client_rim where client_no=#{id}
+	</select>
+	<insert id="insert">
+	insert into client_rim(we_sex,we_name,client_no,add_time,add_user)
+	 values(#{we_sex},#{we_name},#{client_no},#{add_time},#{add_user})
+	</insert>
+	<update id="update"  parameterType="int">
+	update client_rim set we_sex=#{we_sex},we_name=#{we_name} where client_no=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from client_rim where client_no=#{id}
+	</delete>
+	<!-- 批量查询地理位置 -->
+	<select id="allMapaddress" resultType="map"  parameterType="String">
+		select c.* from client_rim c where c.client_no in
+		<foreach collection="array" item="ids" index="index"
+            open="(" close=")" separator=",">
+            #{ids}
+        </foreach> 
+	</select>
+</mapper> 
+

@@ -1,0 +1,250 @@
+10
+
+dir
+4
+https://10.1.1.201/svn/YYWeb/backyy/WebRoot/views
+https://10.1.1.201/svn/YYWeb
+
+
+
+2017-11-28T01:42:15.207950Z
+4
+zjq
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fff08579-ae29-8849-9b15-8f33b364ba70
+
+ClientProduct
+dir
+
+AgentProfit
+dir
+
+ClientRim
+dir
+
+ClientPay
+dir
+
+Permission
+dir
+
+RiskTradetype
+dir
+
+Rate
+dir
+
+BankHead
+dir
+
+Agent
+dir
+
+BalancePay
+dir
+
+Behavior
+dir
+
+ChannelPool
+dir
+
+PayRequest
+dir
+
+DealDate
+dir
+
+DealRecord
+dir
+
+IpWhitelist
+dir
+
+MakeCard
+dir
+
+ClientBinding
+dir
+
+AgentRate
+dir
+
+BaseinfoClass
+dir
+
+FilesInfo
+dir
+
+BankRequestdata
+dir
+
+Checkingbill
+dir
+
+ChannelProductMapper
+dir
+
+Accounts
+dir
+
+ClientRequestdata
+dir
+
+ObjectRate
+dir
+
+UpdateStatusOrder
+dir
+
+PayBilldata
+dir
+
+Baseinfo
+dir
+
+RiskAgent
+dir
+
+ClientResponsedata
+dir
+
+FileInfo
+dir
+
+RiskChannel
+dir
+
+Users
+dir
+
+DealClientDate
+dir
+
+Code2pay
+dir
+
+TestClientLogin
+dir
+
+AgentRequest
+dir
+
+RateInfo
+dir
+
+ChannelPoolDetails
+dir
+
+Userallot
+dir
+
+AgentInfo
+dir
+
+ChannelDetails
+dir
+
+BackCarte
+dir
+
+BehaviorModel
+dir
+
+ChannelParent
+dir
+
+DataPermission
+dir
+
+ClientPort
+dir
+
+BussidBinding
+dir
+
+BankResponsedata
+dir
+
+RateList
+dir
+
+PayBill
+dir
+
+BusiProduct
+dir
+
+Index
+dir
+
+RiskClient
+dir
+
+BusinessId
+dir
+
+MakeCardTotal
+dir
+
+DealClear
+dir
+
+TestClient
+dir
+
+DealAgentDate
+dir
+
+PayChannel
+dir
+
+MarkCardTotal
+dir
+
+BalancePayAll
+dir
+
+common
+dir
+
+AgentProduct
+dir
+
+FilesInfos
+dir
+
+ChannelPoolMapper
+dir
+
+Checkingbilldata
+dir
+
+Area
+dir
+
+AgentPay
+dir
+
+ChannelProduct
+dir
+
+ClientBase
+dir
+
+AgentProfitAll
+dir
+

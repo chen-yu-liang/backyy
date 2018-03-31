@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/MarkCardTotal
+END
+list.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/MarkCardTotal/list.ftl
+END
+markCard.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/MarkCardTotal/markCard.ftl
+END
+add.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/MarkCardTotal/add.ftl
+END

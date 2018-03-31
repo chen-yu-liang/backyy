@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientPay">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from client_pay where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ClientPay" parameterType="int">
+		select * from client_pay where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into ClientPay(pay_serial,status,account_bank_no,deal_begin_date,add_data,account_name,pay_bank,object_no,pay_money,deal_end_date,pay_order,account_card_no,pay_type,pay_bank_serial,check_value)
+	 values(#{pay_serial},#{status},#{account_bank_no},#{deal_begin_date},#{add_data},#{account_name},#{pay_bank},#{object_no},#{pay_money},#{deal_end_date},#{pay_order},#{account_card_no},#{pay_type},#{pay_bank_serial},#{check_value})
+	</insert>
+	<update id="update"  parameterType="int">
+	update ClientPay set pay_serial=#{pay_serial},status=#{status},account_bank_no=#{account_bank_no},deal_begin_date=#{deal_begin_date},add_data=#{add_data},account_name=#{account_name},pay_bank=#{pay_bank},object_no=#{object_no},pay_money=#{pay_money},deal_end_date=#{deal_end_date},pay_order=#{pay_order},account_card_no=#{account_card_no},pay_type=#{pay_type},pay_bank_serial=#{pay_bank_serial},check_value=#{check_value} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from client_pay where Id=#{id}
+	</delete>
+</mapper> 
+

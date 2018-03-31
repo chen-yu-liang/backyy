@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/PayBilldata
+END
+list.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/PayBilldata/list.ftl
+END
+exportBilldata.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/PayBilldata/exportBilldata.ftl
+END
+add.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/PayBilldata/add.ftl
+END

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgentProfitAll">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT apa.*,ag.agent_name,cb.client_name FROM agent_profit_all apa LEFT JOIN agent ag ON apa.all_agent_no = ag.agent_no LEFT JOIN client_base cb ON apa.client_no = cb.client_no
+		WHERE 1=1
+		<if test="params.all_agent_no!=null and params.all_agent_no!=''">
+			and apa.all_agent_no = '${params.all_agent_no}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and apa.deal_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and apa.deal_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		<if test="params.all_agent_lev!=null and params.all_agent_lev!=''">
+			and apa.all_agent_lev = '${params.all_agent_lev}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.AgentProfitAll" parameterType="int">
+		select * from agent_profit_all where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into AgentProfitAll(all_agent_rate,client_rate,all_agent_no,clear_no,add_date,deal_type,client_no,deal_date,all_agent_lev,all_agent_profit,deal_money,client_charge,agent_no,all_agent_charge,serial)
+	 values(#{all_agent_rate},#{client_rate},#{all_agent_no},#{clear_no},#{add_date},#{deal_type},#{client_no},#{deal_date},#{all_agent_lev},#{all_agent_profit},#{deal_money},#{client_charge},#{agent_no},#{all_agent_charge},#{serial})
+	</insert>
+	<update id="update"  parameterType="int">
+	update AgentProfitAll set all_agent_rate=#{all_agent_rate},client_rate=#{client_rate},all_agent_no=#{all_agent_no},clear_no=#{clear_no},add_date=#{add_date},deal_type=#{deal_type},client_no=#{client_no},deal_date=#{deal_date},all_agent_lev=#{all_agent_lev},all_agent_profit=#{all_agent_profit},deal_money=#{deal_money},client_charge=#{client_charge},agent_no=#{agent_no},all_agent_charge=#{all_agent_charge},serial=#{serial} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from agent_profit_all where Id=#{id}
+	</delete>
+	<!-- 清算 -->
+	<select id="liquidation" resultType="map" statementType="CALLABLE">
+		<![CDATA[
+	        {CALL agent_profit_top}
+		]]>
+	</select>
+	<!-- 账单汇总 -->
+	<select id="getBillS" resultType="map" parameterType="Page">
+		SELECT SUM(deal_money) AS dealMoney,COUNT(*) AS num,SUM(client_charge) AS clientCharge,SUM(all_agent_charge) AS allCharge,
+			SUM(all_agent_profit) AS allProfit
+		 FROM agent_profit_all WHERE 1 =1 
+		<if test="all_agent_lev!=null and all_agent_lev!=''">
+			and all_agent_lev = #{all_agent_lev}
+		</if>
+		<if test="all_agent_no!=null and all_agent_no!=''">
+			and all_agent_no=#{all_agent_no}
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			and deal_date <![CDATA[>= ]]> '${begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="endtime!=null and endtime!=''">
+			and deal_date <![CDATA[<= ]]> '${endtime}'
+		</if>
+		
+	</select>
+</mapper> 
+

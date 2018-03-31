@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ObjectRate">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from object_rate where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ObjectRate" parameterType="int">
+		select * from object_rate where object_no=#{id}
+	</select>
+	<insert id="insert">
+	insert into object_rate(object_type,object_no,rate_type,rate_no,add_time,add_user,check_value)
+	 values(#{object_type},#{object_no},#{rate_type},#{rate_no},#{add_time},#{add_user},#{check_value})
+	</insert>
+	<update id="update"  parameterType="int">
+	update object_rate set object_type=#{object_type},object_no=#{object_no},rate_type=#{rate_type},rate_no=#{rate_no},add_time=#{add_time},add_user=#{add_user},check_value=#{check_value} where object_no=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from object_rate where Id=#{id}
+	</delete>
+</mapper> 
+

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PayChannel">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from pay_channel where 1=1
+		<if test="params.company_code!=null and params.company_code!=''">
+			and company_code = '${params.company_code}'
+		</if>
+		<if test="params.company_id!=null and params.company_id!=''">
+			and company_id = '${params.company_id}'
+		</if>
+		<if test="params.ins_id_cd!=null and params.ins_id_cd!=''">
+			and ins_id_cd = '${params.ins_id_cd}'
+		</if>
+		<if test="params.status!=null and params.status!=''">
+			and status = '${params.status}'
+		</if>
+		<if test="params.pay_level!=null and params.pay_level!=''">
+			and pay_level = '${params.pay_level}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.PayChannel" parameterType="String">
+		select * from pay_channel where Id = #{id}
+	</select>
+	<!-- 查询代付通道 -->
+	<select id="getChannelList" resultType="map" >
+		select company_id,code_name from pay_channel
+	</select>
+	
+	<insert id="insert">
+	insert into Pay_Channel(company_code,company_id,status,private_key,pay_level,code_name,term_id,file_date,balance,login_name,login_url,mchnt_cd,update_date,ins_id_cd,public_key,login_pass,data_key,keep)
+	 values(#{company_code},#{company_id},#{status},#{private_key},#{pay_level},#{code_name},#{term_id},#{file_date},#{balance},#{login_name},#{login_url},#{mchnt_cd},#{update_date},#{ins_id_cd},#{public_key},#{login_pass},#{data_key},#{keep})
+	</insert>
+	<update id="update"  parameterType="int">
+		UPDATE pay_channel SET code_name=#{code_name},status=#{status},pay_level=#{pay_level},pay_time=#{pay_time},login_name=#{login_name},login_pass=#{login_pass},login_url=#{login_url} where Id=#{id}
+	</update>
+	<!-- 修改通道启用状态 -->
+	<update id="u_status" parameterType="map">
+		update pay_channel set status = '${status}'  where ins_id_cd = '${ins_id_cd}'
+	</update>
+	
+	
+</mapper> 
+

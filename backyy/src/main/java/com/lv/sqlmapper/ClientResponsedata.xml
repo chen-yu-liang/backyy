@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientResponsedata">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select crp.*,cb.client_name,a.account_name,a.account_card_no,a.account_bank_name from client_responsedata crp 
+		left join client_base cb on cb.client_no = crp.client_no
+		left join accounts a on a.object_id = cb.client_no
+		where 1=1
+		<if test="params.serial!=null and params.serial!=''">
+			and crp.serial = '${params.serial}'
+		</if>
+				<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and substr(crp.localdate,1,10) <![CDATA[>= ]]> '${params.begintime}'
+		</if>	
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and substr(crp.localdate,1,10) <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ClientResponsedata" parameterType="int">
+		select * from client_responsedata where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into ClientResponsedata(amount,time,reqdid,trade_state,status,service,localdate,res_code,number,client_no,pay_time,serial)
+	 values(#{amount},#{time},#{reqdid},#{trade_state},#{status},#{service},#{localdate},#{res_code},#{number},#{client_no},#{pay_time},#{serial})
+	</insert>
+	<update id="update"  parameterType="int">
+	update ClientResponsedata set amount=#{amount},time=#{time},reqdid=#{reqdid},trade_state=#{trade_state},status=#{status},service=#{service},localdate=#{localdate},res_code=#{res_code},number=#{number},client_no=#{client_no},pay_time=#{pay_time},serial=#{serial} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from client_responsedata where Id=#{id}
+	</delete>
+</mapper> 
+

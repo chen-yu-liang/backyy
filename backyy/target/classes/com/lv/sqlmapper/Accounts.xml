@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Accounts">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from accounts where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.Accounts" parameterType="int">
+		select * from accounts where Id=#{id}
+	</select>
+	<select id="getClientOne" resultType="com.lv.entity.Accounts" parameterType="int">
+		select * from accounts where object_id=#{id}
+	</select>
+	<!-- 查询商户账户信息 -->
+	<select id="getObjectAccount" resultType="map" parameterType="int">
+		select * from accounts where object_id=#{id}
+	</select>
+	<insert id="insert">
+	insert into Accounts(account_card_no,account_bank_no,account_bank_name,bank_branch_name,bank_branch_no,object_id,add_time,add_user,account_type,account_name,reservedtel)
+	 values(#{account_card_no},#{account_bank_no},#{account_bank_name},#{bank_branch_name},#{bank_branch_no},#{object_id},#{add_time},#{add_user},#{account_type},#{account_name},#{reservedtel})
+	</insert>
+	<update id="update"  parameterType="int">
+	update Accounts set account_card_no=#{account_card_no},account_bank_no=#{account_bank_no},account_bank_name=#{account_bank_name},bank_branch_name=#{bank_branch_name},account_name=#{account_name},reservedtel=#{reservedtel} where object_id=#{id}
+	</update>
+	<!-- 修改状态 -->
+	<update id="accountstatus"  parameterType="int">
+	update Accounts set status=1 where object_id=#{object_id}
+	</update>
+	<!-- 变更手机号 -->
+	<update id="ChangeAgentAccountMessage"  parameterType="map">
+	update Accounts set reservedtel=#{mobile} where object_id=#{agent_no}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from accounts where object_id=#{id}
+	</delete>
+</mapper> 
+

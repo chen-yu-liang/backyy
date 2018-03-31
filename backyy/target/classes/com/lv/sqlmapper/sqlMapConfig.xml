@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd"> 
+ 
+ <configuration> 
+ <typeAliases> 	
+ 	<typeAlias alias="map" type="java.util.Map"/> 	
+ 	<typeAlias alias="String" type="java.lang.String"/>
+ 	<typeAlias alias="int" type="java.lang.Integer"/>
+ 	<typeAlias alias="Page" type="com.lv.entity.Page"/> 	
+ </typeAliases>
+
+ 
+ <!-- 拦截器 -->
+<plugins>  
+	<plugin interceptor="com.lv.util.PageInterceptor">  
+	<property name="databaseType" value="mysql"/>  
+	<property name="printSql" value="1"/> <!-- 自定义 是否打印sql语句 -->
+	<property name="writeSqlLog" value="1"/><!--自定义 是否存储sql语句日志 -->
+	</plugin>  
+</plugins> 
+ 
+  <!-- 列出映射文件 --> 
+   <mappers>
+	  <mapper resource="com/lv/sqlmapper/Baseinfo.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BaseinfoClass.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BackCarte.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Cache.xml"/>
+	  <mapper resource="com/lv/sqlmapper/DataPermission.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Permission.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Userallot.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Users.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Behavior.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BehaviorModel.xml"/>
+	  <mapper resource="com/lv/sqlmapper/FilesInfo.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Rate.xml"/>
+	  <mapper resource="com/lv/sqlmapper/RateInfo.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Agent.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Area.xml"/>
+	  <mapper resource="com/lv/sqlmapper/FilesInfos.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Accounts.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientBase.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientRim.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientPay.xml"/>
+	  <mapper resource="com/lv/sqlmapper/DealClear.xml"/>
+	  <mapper resource="com/lv/sqlmapper/DealAgentDate.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientPort.xml"/>
+	  <mapper resource="com/lv/sqlmapper/DealClientDate.xml"/>
+	  <mapper resource="com/lv/sqlmapper/DealAgentDate.xml"/>
+	  <mapper resource="com/lv/sqlmapper/DealDate.xml"/>
+	  <mapper resource="com/lv/sqlmapper/DealRecord.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ChannelDetails.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ChannelParent.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Checkingbill.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ObjectRate.xml"/>
+	  <mapper resource="com/lv/sqlmapper/MakeCard.xml"/>
+	  <mapper resource="com/lv/sqlmapper/MakeCardTotal.xml"/>
+	  <mapper resource="com/lv/sqlmapper/MarkCardTotal.xml"/>
+	  <mapper resource="com/lv/sqlmapper/MarkCardTotal.xml"/>
+	  <mapper resource="com/lv/sqlmapper/MarkCardTotal.xml"/>
+	  <mapper resource="com/lv/sqlmapper/MakeCardTotal.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BankHead.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientBinding.xml"/>
+	  <mapper resource="com/lv/sqlmapper/AgentRate.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Checkingbilldata.xml"/>
+	  <mapper resource="com/lv/sqlmapper/AgentProfit.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientProduct.xml"/>
+	  <mapper resource="com/lv/sqlmapper/AgentProduct.xml"/>
+	  <mapper resource="com/lv/sqlmapper/RateList.xml"/>
+	  <mapper resource="com/lv/sqlmapper/RateList.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientBinding.xml"/>
+	  <mapper resource="com/lv/sqlmapper/RiskAgent.xml"/>
+	  <mapper resource="com/lv/sqlmapper/RiskClient.xml"/>
+	  <mapper resource="com/lv/sqlmapper/RiskTradetype.xml"/>
+	  <mapper resource="com/lv/sqlmapper/RiskChannel.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientRequestdata.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientResponsedata.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BankRequestdata.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BankResponsedata.xml"/>
+	  <mapper resource="com/lv/sqlmapper/AgentProduct.xml"/>
+	  <mapper resource="com/lv/sqlmapper/TestClient.xml"/>
+	  <mapper resource="com/lv/sqlmapper/TestClientLogin.xml"/>
+	  <mapper resource="com/lv/sqlmapper/IpWhitelist.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ChannelPool.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ChannelPoolDetails.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ChannelPoolMapper.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ChannelProduct.xml"/>
+	  <mapper resource="com/lv/sqlmapper/AgentProfitAll.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BalancePay.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BalancePayAll.xml"/>
+	  <mapper resource="com/lv/sqlmapper/AgentPay.xml"/>
+	  <mapper resource="com/lv/sqlmapper/PayRequest.xml"/>
+	  <mapper resource="com/lv/sqlmapper/AgentRequest.xml"/>
+	  <mapper resource="com/lv/sqlmapper/PayChannel.xml"/>
+	  <mapper resource="com/lv/sqlmapper/Code2pay.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BusinessId.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BussidBinding.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ClientPort.xml"/>
+	  <mapper resource="com/lv/sqlmapper/PayBill.xml"/>
+	  <mapper resource="com/lv/sqlmapper/PayBilldata.xml"/>
+	  <mapper resource="com/lv/sqlmapper/UpdateStatusOrder.xml"/>
+	  <mapper resource="com/lv/sqlmapper/BusiProduct.xml"/>
+	  <mapper resource="com/lv/sqlmapper/ChannelProductMapper.xml"/>
+ </mappers> 
+ </configuration> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgentProfit">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT da.*,a.agent_name,ac.account_name,ac.account_card_no FROM agent_profit da 
+		LEFT JOIN agent a ON da.agent_no=a.agent_no
+		LEFT JOIN accounts ac ON da.agent_no=ac.object_id
+        WHERE 1=1
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and da.agent_no=#{params.agent_no}
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			<!-- 到   日期yyyy-MM-dd-->
+			<if test="params.endtime!=null and params.endtime!=''">
+				and da.deal_date <![CDATA[>= ]]> '${params.begintime}' and da.deal_date <![CDATA[<= ]]> '${params.endtime}'
+			</if>
+			<if test="params.endtime == null or params.endtime ==''">
+				and da.deal_date <![CDATA[= ]]> '${params.begintime}' 
+			</if>
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.AgentProfit" parameterType="int">
+		select * from agent_profit where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into AgentProfit(amount,clear_amount,agent_cost,qilui_date,agent_no,agent_profit,count_num,deal_date)
+	 values(#{amount},#{clear_amount},#{agent_cost},#{qilui_date},#{agent_no},#{agent_profit},#{count_num},#{deal_date})
+	</insert>
+	<update id="update"  parameterType="int">
+	update AgentProfit set amount=#{amount},clear_amount=#{clear_amount},agent_cost=#{agent_cost},qilui_date=#{qilui_date},agent_no=#{agent_no},agent_profit=#{agent_profit},count_num=#{count_num},deal_date=#{deal_date} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from agent_profit where Id=#{id}
+	</delete>
+	<!-- 代理商汇总 -->
+	<select id="getcountList" resultType="map" parameterType="Page">
+		SELECT SUM(amount) ant,SUM(client_charge) cant,SUM(agent_charge) aco,COUNT(serial) num,SUM(agent_profit) apro FROM agent_profit da
+		LEFT JOIN agent a ON da.agent_no=a.agent_no
+		LEFT JOIN accounts ac ON da.agent_no=ac.object_id
+		where	1=1	
+		<if test="agent_no!=null and agent_no!=''">
+			and da.agent_no=#{agent_no}
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			<!-- 到   日期yyyy-MM-dd-->
+			<if test="endtime!=null and endtime!=''">
+				and da.deal_date <![CDATA[>= ]]> '${begintime}' and da.deal_date <![CDATA[<= ]]> '${endtime}'
+			</if>
+			<if test="endtime == null or endtime ==''">
+				and da.deal_date <![CDATA[= ]]> '${begintime}' 
+			</if>
+		</if>
+	</select>
+	<!-- 导出交易明细信息 -->
+	<select id="exportAgentProfit" resultType="map" parameterType="map">
+		SELECT da.*,a.agent_name,ac.account_name,ac.account_card_no FROM agent_profit da 
+		LEFT JOIN agent a ON da.agent_no=a.agent_no
+		LEFT JOIN accounts ac ON da.agent_no=ac.object_id
+        WHERE 1=1
+		<if test="agent_no!=null and agent_no!=''">
+			and da.agent_no=#{agent_no}
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			<!-- 到   日期yyyy-MM-dd-->
+			<if test="endtime!=null and endtime!=''">
+				and da.deal_date <![CDATA[>= ]]> '${begintime}' and da.deal_date <![CDATA[<= ]]> '${endtime}'
+			</if>
+			<if test="endtime == null or endtime ==''">
+				and da.deal_date <![CDATA[= ]]> '${begintime}' 
+			</if>
+		</if>
+	</select>	
+</mapper> 
+

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DealClear">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT dr.*,c.client_name,a.agent_name FROM deal_profit dr 
+		LEFT JOIN client_base c ON dr.client_no=c.client_no
+		LEFT JOIN agent a ON dr.agent_no=a.agent_no
+		where 1=1
+		<if test="params.client_no!=null and params.client_no!=''">
+			and dr.client_no=#{params.client_no}
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and dr.agent_no=#{params.agent_no}
+		</if>
+		<if test="params.deal_type!=null and params.deal_type!=''">
+			and dr.deal_type=#{params.deal_type}
+		</if>
+		<if test="params.status!=null and params.status!=''">
+			and dr.status=#{params.status}
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and dr.liqui_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and dr.liqui_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.DealClear" parameterType="int">
+		select * from deal_clear where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into DealClear(pay_serial,clear_amount,net_profit,status,add_date,client_no,deal_type,agent_profit,deal_date,amount,bank_card,gross_profit,bank_serial,agent_no,bid,serial,check_value,clear_rate_no)
+	 values(#{pay_serial},#{clear_amount},#{net_profit},#{status},#{add_date},#{client_no},#{deal_type},#{agent_profit},#{deal_date},#{amount},#{bank_card},#{gross_profit},#{bank_serial},#{agent_no},#{bid},#{serial},#{check_value},#{clear_rate_no})
+	</insert>
+	<update id="update"  parameterType="int">
+	update DealClear set pay_serial=#{pay_serial},clear_amount=#{clear_amount},net_profit=#{net_profit},status=#{status},add_date=#{add_date},client_no=#{client_no},deal_type=#{deal_type},agent_profit=#{agent_profit},deal_date=#{deal_date},amount=#{amount},bank_card=#{bank_card},gross_profit=#{gross_profit},bank_serial=#{bank_serial},agent_no=#{agent_no},bid=#{bid},serial=#{serial},check_value=#{check_value},clear_rate_no=#{clear_rate_no} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from deal_clear where Id=#{id}
+	</delete>
+	<!--分润清算明细汇总 -->
+	<select id="getcountList" resultType="map" parameterType="Page">
+		SELECT SUM(money) ant,SUM(settlement) cant, SUM(client_charge) pro,SUM(agent_charge) npro,SUM(agent_profit) apro,SUM(td_charge) tdc FROM deal_profit dr
+		LEFT JOIN client_base c ON dr.client_no=c.client_no
+		LEFT JOIN agent a ON dr.agent_no=a.agent_no
+		where 1=1
+		<if test="client_no!=null and client_no!=''">
+			and dr.client_no=#{client_no}
+		</if>
+		<if test="agent_no!=null and agent_no!=''">
+			and dr.agent_no=#{agent_no}
+		</if>
+		<if test="deal_type!=null and deal_type!=''">
+			and dr.deal_type=#{deal_type}
+		</if>
+		<if test="status!=null and status!=''">
+			and dr.status=#{status}
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			and dr.liqui_date <![CDATA[>= ]]> '${begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="endtime!=null and endtime!=''">
+			and dr.liqui_date <![CDATA[<= ]]> '${endtime}'
+		</if>
+	</select>
+	<!-- 按天汇总代理商 -->
+	<select id="getAgentsummary" resultType="map" parameterType="Page">
+		SELECT SUM(dc.money) amount,SUM(settlement) clear_amount,SUM(agent_profit) agent_profit,SUM(agent_charge) net_profit,COUNT(dr.id) count_num,
+		dr.deal_date,dc.agent_no,dc.liqui_date
+		FROM deal_profit dc LEFT JOIN deal_record dr ON dr.serial=dc.serial
+		WHERE dr.status=0 
+		<if test="params.starttime!=null and params.starttime!=''">
+			and dr.deal_date <![CDATA[>]]> '${params.starttime}'
+		</if>
+		<if test="params.endtime!=null and params.endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		GROUP BY dc.agent_no,dr.deal_date 
+	</select>
+	<!-- 按天汇总商户 -->
+	<select id="getClientsummary" resultType="map" parameterType="Page">
+		SELECT SUM(dc.money) amount,SUM(settlement) clear_amount,SUM(agent_charge) gross_profit,SUM(agent_profit) agent_profit,SUM(client_charge) net_profit,COUNT(dr.id) count_num,
+		dr.deal_date,dc.client_no,dc.liqui_date,dc.agent_no
+		FROM deal_profit dc LEFT JOIN deal_record dr ON dr.serial=dc.serial
+		WHERE dr.status=0
+		<if test="params.starttime!=null and params.starttime!=''">
+			and dr.deal_date <![CDATA[>]]> '${params.starttime}'
+		</if>
+		<if test="params.endtime!=null and params.endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		GROUP BY dc.client_no,dr.deal_date 
+	</select>
+	<!-- 按天汇总交易 -->
+	<select id="getsummary" resultType="map" parameterType="Page">
+		SELECT SUM(money) amount,SUM(settlement) clear_amount,SUM(agent_charge) gross_profit,SUM(agent_profit) agent_profit,SUM(client_charge) net_profit,COUNT(dr.id) count_num,
+		dr.deal_date,dc.serial,dc.liqui_date
+		FROM deal_profit dc LEFT JOIN deal_record dr ON dr.serial=dc.serial 
+		WHERE dr.status=0 
+		<if test="params.starttime!=null and params.starttime!=''">
+			and dr.deal_date <![CDATA[>]]> '${params.starttime}'
+		</if>
+		<if test="params.endtime!=null and params.endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		GROUP BY dr.deal_date
+	</select>
+		<!-- 查询最大日期 -->
+	<select id="getMaxclearTime" resultType="String" >
+		SELECT MAX(deal_date) date FROM deal_profit
+	</select>
+</mapper> 
+

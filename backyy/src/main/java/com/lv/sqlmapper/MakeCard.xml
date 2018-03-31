@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MakeCard">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from make_card where 1=1
+		<if test="params.client_no_start_num!=null and params.client_no_start_num!=''">
+			and client_no <![CDATA[>= ]]> '${params.client_no_start_num}'
+		</if>
+		<if test="params.client_no_end_num!=null and params.client_no_end_num!=''">
+			and client_no <![CDATA[<= ]]> '${params.client_no_end_num}'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and agent_no = '${params.agent_no}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and add_time <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and add_time <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.MakeCard" parameterType="int">
+		select * from make_card where Id=#{id}
+	</select>
+	<insert id="savaMakeCard" parameterType="java.util.List">
+		insert into make_card(mark_card_time,client_no,add_time,agent_no) 
+		values 
+		<foreach collection ="list" item="item" index= "index" separator =","> 
+		(
+		#{item.mark_card_time},
+		#{item.client_no},
+		#{item.add_time},
+		#{item.agent_no}
+		) 
+		</foreach> 
+	</insert>
+	<update id="update"  parameterType="int">
+	update make_card set mark_card_time=#{mark_card_time},client_no=#{client_no},add_time=#{add_time},agent_no=#{agent_no} where Id=#{id}
+	</update>
+	<update id="updateMakeCard"  parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";"> 
+			update make_card 
+			set
+			mark_card_time=#{item.mark_card_time},agent_no=#{item.agent_no},ismarke=1
+			where client_no=#{item.client_no}
+		</foreach> 
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from make_card where Id=#{id}
+	</delete>
+		<!-- 获得制卡初始商户号 -->
+	<select id="getMinClientNo" resultType="int" parameterType="int">
+		select min(client_no) from make_card 
+	</select>
+		<!-- 获得商户号 -->
+	<select id="getAllClientNo" resultType="map" parameterType="map">
+		select client_no from make_card where client_no <![CDATA[>= ]]> '${startNum}' and client_no <![CDATA[<= ]]> '${endNum}'
+	</select>
+</mapper> 
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="FilesInfos">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from files_infos where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.FilesInfos" parameterType="int">
+		select * from files_infos where files_id=#{id}
+	</select>
+	<insert id="insert">
+	insert into files_infos(add_man,files_address,files_name,add_time,client_no,files_type,acount_type)
+	 values(#{add_man},#{files_address},#{files_name},#{add_time},#{client_no},#{files_type},#{acount_type})
+	</insert>
+	<update id="update"  parameterType="int">
+	update files_infos set add_man=#{add_man},files_id=#{files_id},files_address=#{files_address},files_mame=#{files_mame},add_time=#{add_time},client_no=#{client_no},files_type=#{files_type},acount_type=#{acount_type} where files_id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from files_infos where files_id=#{id}
+	</delete>
+	<!-- 根据商户编号查询图片信息  -->
+	<select id="getPic" resultType="map" parameterType="map">
+	 	 SELECT fi.*,
+         bi.info pic_name
+ 	FROM files_infos fi
+	LEFT JOIN baseinfo bi ON bi.info_en=fi.files_type
+	where bi.class_en=#{class_en} and bi.status=1 and fi.client_no=#{client_no} 
+	ORDER BY fi.files_type desc
+	</select>
+</mapper> 
+

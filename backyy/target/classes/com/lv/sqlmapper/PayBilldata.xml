@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PayBilldata">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from pay_billdata where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+			<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+			<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.PayBilldata" parameterType="int">
+		select * from pay_billdata where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into PayBilldata(amount,rrno,paid_date,number_no,money,bill_no,batch_no)
+	 values(#{amount},#{rrno},#{paid_date},#{number_no},#{money},#{bill_no},#{batch_no})
+	</insert>
+	<update id="update"  parameterType="int">
+	update PayBilldata set amount=#{amount},rrno=#{rrno},paid_date=#{paid_date},number_no=#{number_no},money=#{money},bill_no=#{bill_no},batch_no=#{batch_no} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from pay_billdata where Id=#{id}
+	</delete>
+	<!-- 代付明细 -->
+	<insert id="addPaydataMap"  parameterType="map">
+	insert into Pay_Billdata(amount,rrno,paid_date,number_no,money,bill_no,batch_no,client_no)
+	 values(#{amount},#{rrno},#{paid_date},#{number_no},#{money},#{bill_no},#{batch_no},#{client_no})
+	</insert>
+	<!-- 代付汇总 -->
+	<insert id="addPayMap" parameterType="map">
+	insert into Pay_Bill(clear_date,total_sum,bill_no,total_money,client_no)
+	 values(#{clear_date},#{total_sum},#{bill_no},#{total_money},#{client_no})
+	</insert>
+	<!-- 查询tbid -->
+	<select id="getListTbid" resultType="map">
+		SELECT company_id,code_name,ins_id_cd FROM pay_channel WHERE STATUS = 1	
+	</select>
+	<select id="getBill" resultType="String" parameterType="string">
+		select count(*) from pay_bill where bill_no = #{bill_no}
+	</select>
+</mapper> 
+

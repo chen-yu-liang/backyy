@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientBinding">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select cb.*,c.client_name,a.agent_name,cp.name,ac.account_name from client_binding cb
+		left join channel_details cd on cd.c_id = cb.bid
+		left join channel_parent cp on cp.id = cd.c_pid
+		left join client_base c on c.client_no = cb.client_no
+		left join agent a on a.agent_no = c.agent_no
+		left join accounts ac on ac.object_id = c.client_no
+		where 1=1
+		<if test="params.status!=null and params.status!=''">
+			and cb.status = '${params.status}'
+		</if>
+		<if test="params.tbid!=null and params.tbid!=''">
+			and cb.tbid= '${params.tbid}'
+		</if>
+		<if test="params.client_no!=null and params.client_no!=''">
+			and cb.client_no = '${params.client_no}'
+		</if>
+		<if test="params.account_name!=null and params.account_name!=''">
+			and ac.account_name like '${params.account_name}'
+		</if>
+		<if test="params.bind_type!=null and params.bind_type!=''">
+			and cb.bind_type = '${params.bind_type}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and cb.add_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and cb.add_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ClientBinding" parameterType="int">
+		select * from client_binding where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into client_binding(add_man,status,client_no,add_date,add_time,bid,bind_type,tbid)
+	 values(#{add_man},#{status},#{client_no},#{add_date},#{add_time},#{bid},#{bind_type},#{tbid})
+	</insert>
+	<update id="update"  parameterType="int">
+	update client_binding set status=#{status},client_no=#{client_no},bid=#{bid},bind_type=#{bind_type} where id=#{id}
+	</update>
+	<update id="updateStatus"  parameterType="map">
+		update client_binding set status=#{status} where id=#{id} 
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from client_binding where id=#{id}
+	</delete>
+	<!-- 查询所有通道 -->
+	<select id="getClientBindingList" resultType="map" >
+		select * from channel_parent
+	</select>
+	<!-- 查询要绑定商户信息 -->
+	<select id="getClientInfo" resultType="map" parameterType="String">
+		select c.client_name,a.agent_name,ac.account_name,(select count(c_id) from channel_details where client_no = #{c_client_no}) bind_num 
+		from client_base c 
+		left join agent a on a.agent_no = c.agent_no
+		left join accounts ac on ac.object_id = c.client_no
+		where c.client_no = #{c_client_no}
+	</select>
+		<!-- 查询绑定商户商编信息 -->
+	<select id="getBingClientInfo" resultType="map" parameterType="map">
+		SELECT cd.c_id
+		FROM channel_details cd 
+		where cd.c_pid = '${tbid}' and cd.mch_id = '${mch_id}'
+	</select>
+</mapper> 
+

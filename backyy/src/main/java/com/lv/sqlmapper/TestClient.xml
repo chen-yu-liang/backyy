@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TestClient">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from test_client where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.TestClient" parameterType="com.lv.entity.TestClient">
+		select * from test_client where test_client=#{test_client} and test_user = #{test_user}
+	</select>
+	<insert id="addTestClient" parameterType="com.lv.entity.TestClient">
+	insert into test_client(test_client,test_user)
+	 values(#{test_client},#{test_user})
+	</insert>
+	<update id="update"  parameterType="int">
+	update TestClient set test_client=#{test_client},test_user=#{test_user} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from test_client where Id=#{id}
+	</delete>
+</mapper> 
+

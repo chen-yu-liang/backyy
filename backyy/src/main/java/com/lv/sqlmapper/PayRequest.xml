@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PayRequest">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from pay_request where 1=1
+		<if test="params.tran_seq!=null and params.tran_seq!=''">
+			and tran_seq = '${params.tran_seq}'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and agent_no = '${params.agent_no}'
+		</if>
+		<!-- 出款状态 -->
+		<if test="params.status_code!=null and params.status_code!=''">
+			and status_code = '${params.status_code}'
+		</if>
+		<!-- 通道 -->
+		<if test="params.bid!=null and params.bid!=''">
+			and bid = '${params.bid}'
+		</if>
+		<!-- 渠道 -->
+		<if test="params.ins_bid!=null and params.ins_bid!=''">
+			and ins_bid = '${params.ins_bid}'
+		</if>
+				<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			<!-- 到   日期yyyy-MM-dd-->
+			<if test="params.endtime!=null and params.endtime!=''">
+				and DATE(tran_time) <![CDATA[>= ]]> '${params.begintime}' and DATE(tran_time) <![CDATA[<= ]]> '${params.endtime}'
+			</if>
+			<if test="params.endtime == null or params.endtime ==''">
+				and DATE(tran_time) <![CDATA[= ]]> '${params.begintime}' 
+			</if>
+		</if>
+		order by file_date desc
+	</select>
+	<select id="getOne" resultType="com.lv.entity.PayRequest" parameterType="int">
+		select * from pay_request where Id=#{id}
+	</select>
+		<!-- 导出代付明细信息 -->
+	<select id="exportPayRequestSql" resultType="map" parameterType="String">
+		SELECT agent_no,tran_seq,resutl_seq,tran_amt,pay_acct_nm,pay_acct_no,tran_time,result_code,result_info,status_code,status_info FROM pay_request WHERE tran_seq in
+		 <foreach collection="array" item="str" index="index"
+            open="(" close=")" separator=",">
+            #{str}
+        </foreach>
+	</select>
+	
+	<insert id="insert">
+	insert into PayRequest(status_info,pay_acct_tp,tran_seq,term_id,ins_bid,resutl_seq,pay_acct_nm,pay_acct_no,select_count,tran_cd,pay_type,mchnt_cd,result_info,agent_no,bid,status_code,org_tran_seq,bacth_no,dispose,file_date,client_no,result_code,tran_time,ins_id_cd,pay_bank_nm,tran_amt,old_tran_seq,pay_bank_no)
+	 values(#{status_info},#{pay_acct_tp},#{tran_seq},#{term_id},#{ins_bid},#{resutl_seq},#{pay_acct_nm},#{pay_acct_no},#{select_count},#{tran_cd},#{pay_type},#{mchnt_cd},#{result_info},#{agent_no},#{bid},#{status_code},#{org_tran_seq},#{bacth_no},#{dispose},#{file_date},#{client_no},#{result_code},#{tran_time},#{ins_id_cd},#{pay_bank_nm},#{tran_amt},#{old_tran_seq},#{pay_bank_no})
+	</insert>
+	<update id="update"  parameterType="int">
+		update PayRequest set status_info=#{status_info},pay_acct_tp=#{pay_acct_tp},tran_seq=#{tran_seq},term_id=#{term_id},ins_bid=#{ins_bid},resutl_seq=#{resutl_seq},pay_acct_nm=#{pay_acct_nm},pay_acct_no=#{pay_acct_no},select_count=#{select_count},tran_cd=#{tran_cd},pay_type=#{pay_type},mchnt_cd=#{mchnt_cd},result_info=#{result_info},agent_no=#{agent_no},bid=#{bid},status_code=#{status_code},org_tran_seq=#{org_tran_seq},bacth_no=#{bacth_no},dispose=#{dispose},file_date=#{file_date},client_no=#{client_no},result_code=#{result_code},tran_time=#{tran_time},ins_id_cd=#{ins_id_cd},pay_bank_nm=#{pay_bank_nm},tran_amt=#{tran_amt},old_tran_seq=#{old_tran_seq},pay_bank_no=#{pay_bank_no} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from pay_request where Id=#{id}
+	</delete>
+</mapper> 
+

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Baseinfo">
+	<select id="getPageList" resultType="map" parameterType="map">
+		select * from baseinfo where 1=1 and class_en=#{params.class_en}
+		<if test="params.info_en!=null and params.info_en!=''">
+			and info_en= '${params.info_en}'
+		</if>
+	</select>
+
+	<select id="getList" resultType="map" parameterType="String">
+		select * from baseinfo where 1=1 and class_en=#{class_en}
+	</select>
+	
+	<select id="getTreeList" resultType="map" parameterType="String">
+		select info as name,info_en as id,parent_info_en as pId from baseinfo where 1=1
+		<if test="class_en!=null and class_en!=''">
+			and class_en =#{class_en};
+	    </if>
+		<if test="parent_info_en!=null and parent_info_en!=''">
+			and parent_info_en=#{parent_info_en}
+	    </if>
+	</select>
+	
+	<select id="getOne" resultType="com.lv.entity.Baseinfo" parameterType="int">
+		select * from baseinfo where Id=#{id}
+	</select>
+	<!-- 增加基本信息详细 -->
+	<insert id="insert" parameterType="com.lv.entity.Baseinfo">
+		insert into Baseinfo(addtime,status,addname,class_en,info_en,info)
+	 	values(now(),#{status},#{addname},#{class_en},#{info_en},#{info})
+	</insert>
+	<!-- 修改基本信息详细 -->
+	<update id="update"  parameterType="int">
+		update baseinfo set status=#{status},info=#{info} where Id=#{id}
+	</update>
+	<!-- 修改状态 -->
+	<update id="updateStatus"  parameterType="map">
+		update baseinfo set status=#{status} where id=#{id} 
+	</update>
+	<!-- 依靠id删除基本信息 -->
+	<delete id="delete" parameterType="int">
+		delete from baseinfo where Id=#{id}
+	</delete>
+	<!-- 依靠父类英文代号删除基本信息 -->
+	<delete id="deleteByClassEn" parameterType="String">
+		delete from baseinfo where class_en=#{class_en}
+	</delete>
+	<select id="info_en_num" parameterType="map" resultType="int">
+	   select count(*) as num from baseinfo where class_en=#{class_en} and info_en=#{info_en}
+	</select>
+	<!-- 获取图片基础信息 -->
+	<select id="getpicbaseinfo" resultType="map" parameterType="map">
+		select info_en,info from baseinfo t where t.class_en=#{class_en} and status=1 order by addtime
+	</select>
+	<!-- 获取产品信息 -->
+	<select id="getProduct" resultType="map" parameterType="String">
+		select info_en,info from baseinfo t where t.class_en=#{class_en} and status=1 order by addtime
+	</select>
+	<!-- 获取所有银行通道 -->
+	<select id="getAllBid" resultType="map" parameterType="String">
+		select info_en,info from baseinfo t where t.class_en=#{class_en} and status=1 order by addtime
+	</select>
+		<!-- 获取产品信息2 -->
+	<select id="getrisk" resultType="com.lv.entity.Baseinfo" parameterType="map">
+		select info_en,info from baseinfo t where t.class_en=#{class_en} and t.status=1 and t.info_en = #{info_en}
+	</select>
+	<!-- 获取单个产品名 -->
+	<select id="getDealType" resultType="com.lv.entity.Baseinfo" parameterType="String">
+		select info_en,info from baseinfo t where t.class_en="product_type" and t.status=1 and t.info_en = #{deal_type}
+	</select>	
+</mapper> 
+

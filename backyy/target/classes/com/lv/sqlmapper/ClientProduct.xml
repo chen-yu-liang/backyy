@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientProduct">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select cp.*,bp.pro_name from client_product cp left join busi_product bp on cp.product_no = bp.pro_no
+		where 1=1
+		<if test="params.client_no!=null and params.client_no!=''">
+			and cp.client_no = '${params.client_no}'
+		</if>
+		<if test="params.product_no!=null and params.product_no!=''">
+			and cp.product_no = '${params.product_no}'
+		</if>
+		<if test="params.status!=null and params.status!=''">
+			and cp.status = '${params.status}'
+		</if>
+		<if test="params.clear_type!=null and params.clear_type!=''">
+			and cp.clear_type= '${params.clear_type}'
+		</if>
+	</select>
+	<select id="getAllProduct" resultType="com.lv.entity.ClientProduct" parameterType="map">
+		select * from client_product where client_no=#{id} and product_no=#{product_no} and clear_type = #{clear_type}
+	</select>
+	<select id="getAllPro" resultType="com.lv.entity.ClientProduct" parameterType="map">
+		select * from client_product where client_no=#{id} 
+	</select>
+	<select id="getClientProduct" resultType="com.lv.entity.ClientProduct" parameterType="com.lv.entity.ClientProduct">
+		select * from client_product where client_no=#{client_no} and product_no=#{product_no} and clear_type = #{clear_type}
+	</select>
+	<insert id="insert">
+	insert into client_product(rate,status,adddate,client_no,product_no,clear_type,card_type)
+	 values(#{rate},#{status},#{adddate},#{client_no},#{product_no},#{clear_type},#{card_type})
+	</insert>
+	<update id="update"  parameterType="com.lv.entity.ClientProduct">
+	update client_product set rate=#{rate},status=#{status},adddate=#{adddate},client_no=#{client_no},product_no=#{product_no},clear_type=#{clear_type},card_type=#{card_type} where product_no=#{product_no} and client_no=#{client_no}
+	</update>
+	<delete id="deletepro" parameterType="map">
+		delete from client_product where product_no=#{product_no} and client_no=#{id} and clear_type = #{clear_type}
+	</delete>
+	<update id="updateStatus"  parameterType="map">
+		update client_product set status=#{status} where product_no=#{product_no} and client_no=#{id} and clear_type = #{clear_type}
+	</update>
+</mapper> 
+

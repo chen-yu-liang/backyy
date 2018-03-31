@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TestClientLogin">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT tcl.*,tc.test_client FROM test_client_login tcl  LEFT JOIN test_client tc ON tcl.test_user = tc.test_user 
+		where 1=1
+		<if test="params.test_client!=null and params.test_client!=''">
+			and tc.test_client = '${params.test_client}'
+		</if>
+		<if test="params.test_user!=null and params.test_user!=''">
+			and tcl.test_user = '${params.test_user}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.TestClientLogin" parameterType="int">
+		select * from test_client_login where Id=#{id}
+	</select>
+	<!-- 查询登录名 -->
+	<select id="getTestUserNum" resultType="com.lv.entity.TestClientLogin" parameterType="map">
+		select * from test_client_login where test_user=#{test_user}
+	</select>
+	<!-- 查询所有登录名 -->
+	<select id="getAllClientLogin" resultType="map" >
+		select * from test_client_login 
+	</select>
+	<insert id="addTestClientLogin" parameterType="map">
+	insert into test_client_login(test_user,test_pass,last_time,test_status,test_username)
+	 values(#{test_user},#{test_pass},now(),0,#{test_username})
+	</insert>
+	<update id="update"  parameterType="int">
+	update TestClientLogin set test_user=#{test_user},test_pass=#{test_pass},last_time=#{last_time},test_status=#{test_status} where Id=#{id}
+	</update>
+	<update id="updateStatus"  parameterType="map">
+	update test_client_login set test_status=#{test_status} where test_user=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from test_client_login where Id=#{id}
+	</delete>
+</mapper> 
+

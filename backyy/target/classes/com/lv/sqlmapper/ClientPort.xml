@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientPort">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from client_port where 1=1
+		<if test="params.client_no!=null and params.client_no!=''">
+			and client_no = '${params.client_no}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ClientPort" parameterType="int">
+		select * from client_port where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into client_port(status,client_response,client_no,client_ip)
+	 values(#{status},#{client_response},#{client_no},#{client_ip})
+	</insert>
+	<update id="update"  parameterType="int">
+	update client_port set status=#{status},client_response=#{client_response},client_no=#{client_no},client_ip=#{client_ip} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from client_port where Id=#{id}
+	</delete>
+</mapper> 
+

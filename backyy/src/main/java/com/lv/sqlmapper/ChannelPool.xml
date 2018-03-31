@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChannelPool">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from channel_pool where 1=1
+		<if test="params.c_id!=null and params.c_id!=''">
+			and c_id = '${params.c_id}'
+		</if>
+		<if test="params.c_name!=null and params.c_name!=''">
+			and c_name like '%${params.c_name}%'
+		</if>
+		<if test="params.c_level!=null and params.c_level!=''">
+			and c_level = '${params.c_level}'
+		</if>
+		<if test="params.c_status!=null and params.c_status!=''">
+			and c_status = '${params.c_status}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and c_cratedate <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and c_cratedate <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ChannelPool" parameterType="int">
+		select * from channel_pool where c_id=#{id}
+	</select>
+	<!-- 查询商编池编号 -->
+	<select id="getMaxCid" resultType="int" >
+		SELECT MAX(c_id) FROM channel_pool  
+	</select>
+	<!-- 查询所有商编池编号 -->
+	<select id="getchannelPool" resultType="map" >
+		SELECT * FROM channel_pool  
+	</select>
+	<!-- 查询所有不含默认商编池编号 -->
+	<select id="getchannelmapperPool" resultType="map" >
+		SELECT * FROM channel_pool where c_default = 0
+	</select>
+	<insert id="insert">
+	insert into channel_pool(c_status,c_default,c_createman,c_cratedate,c_remark,c_level,c_id,c_updatedate,c_name)
+	 values(#{c_status},#{c_default},#{c_createman},#{c_cratedate},#{c_remark},#{c_level},#{c_id},#{c_updatedate},#{c_name})
+	</insert>
+	<update id="update"  parameterType="int">
+	update channel_pool set c_status=#{c_status},c_remark=#{c_remark},c_level=#{c_level},c_updatedate=#{c_updatedate},c_name=#{c_name} where c_id=#{c_id}
+	</update>
+	<!-- 设置为默认池子 -->
+	<update id="updateStatus"  parameterType="int">
+		update channel_pool set c_default=1 where c_id=#{id}
+	</update>
+	<update id="updateAllStatus"  parameterType="int">
+		update channel_pool set c_default=0 where c_id!=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from channel_pool where Id=#{id}
+	</delete>
+</mapper> 
+

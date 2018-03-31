@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/AgentRate
+END
+list.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/AgentRate/list.ftl
+END
+toSetSettleInfo.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/AgentRate/toSetSettleInfo.ftl
+END
+add.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/AgentRate/add.ftl
+END

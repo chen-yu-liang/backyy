@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Behavior">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from behavior where 1=1
+		<!-- 行为记录 -->
+		<if test="params.info!=null and params.info!=''">
+			and info like '%${params.info}%'
+		</if>
+		<!-- 添加平台 -->
+		<if test="params.platform!=null and params.platform!=''">
+			and platform = '${params.platform}'
+		</if>
+		<!-- 行为类型 -->
+		<if test="params.operate_type!=null and params.operate_type!=''">
+			and operate_type like '%${params.operate_type}%'
+		</if>
+		<!-- 操作人 -->
+		<if test="params.operate_name!=null and params.operate_name!=''">
+			and operate_name like '%${params.operate_name}%'
+		</if>
+		order by add_time desc
+	</select>
+	<select id="getOne" resultType="com.lv.entity.Behavior" parameterType="int">
+		select * from behavior where Id=#{id}
+	</select>
+	<!-- 添加行为记录 -->
+	<insert id="insert">
+		insert into behavior(platform,add_time,info,ip,operate_name,name,operate_type) values(#{platform},now(),#{info},#{ip},#{operate_name},#{name},#{operate_type})
+	</insert>
+	<update id="update"  parameterType="int">
+		update behavior set platform=#{platform},add_time=#{add_time},info=#{info},ip=#{ip} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from behavior where Id=#{id}
+	</delete>
+</mapper> 
+

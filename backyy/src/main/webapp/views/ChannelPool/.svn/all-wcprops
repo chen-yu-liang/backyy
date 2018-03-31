@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ChannelPool
+END
+list.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ChannelPool/list.ftl
+END
+getBussiness.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ChannelPool/getBussiness.ftl
+END
+add.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ChannelPool/add.ftl
+END

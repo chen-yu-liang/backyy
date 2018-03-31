@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DealRecord">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT dr.*,bp.pro_name,c.client_name,a.agent_name,ac.account_name,ac.account_card_no,ac.account_bank_name,cp.name,dp.client_charge,dp.client_rate,dp.settlement,cd.c_pid
+		FROM deal_record dr
+		LEFT JOIN busi_product bp on dr.deal_type  = bp.pro_no
+		LEFT JOIN client_base c ON dr.client_no=c.client_no
+		LEFT JOIN agent a ON c.agent_no=a.agent_no
+		LEFT JOIN accounts ac ON dr.client_no=ac.object_id
+		LEFT JOIN channel_details cd ON cd.c_id=dr.bid
+		LEFT JOIN channel_parent cp ON cp.id = cd.c_pid	
+		LEFT JOIN deal_profit dp on dp.serial = dr.serial
+		where 1=1
+		<if test="params.client_no!=null and params.client_no!=''">
+			and dr.client_no=#{params.client_no}
+		</if>
+		<if test="params.req_did!=null and params.req_did!=''">
+			and dr.req_did=#{params.req_did}
+		</if>
+		<if test="params.serial!=null and params.serial!=''">
+			and dr.serial=#{params.serial}
+		</if>
+		<if test="params.bank_serial!=null and params.bank_serial!=''">
+			and dr.bank_serial=#{params.bank_serial}
+		</if>
+		<if test="params.client_name!=null and params.client_name!=''">
+			and c.client_name like '%${params.client_name}%'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and a.agent_no=#{params.agent_no}
+		</if>
+		<if test="params.deal_type!=null and params.deal_type!=''">
+			and dr.deal_type=#{params.deal_type}
+		</if>
+		<if test="params.status!=null and params.status!=''">
+			and dr.status=#{params.status}
+		</if>
+		<if test="params.pay_status!=null and params.pay_status!=''">
+			and dr.pay_status=#{params.pay_status}
+		</if>
+		<if test="params.liquidation!=null and params.liquidation!=''">
+			and dr.liquidation=#{params.liquidation}
+		</if>
+		<if test="params.bid!=null and params.bid!=''">
+			and dr.bid=#{params.bid}
+		</if>
+		<if test="params.tbid!=null and params.tbid!=''">
+			and cp.id=#{params.tbid}
+		</if>
+		
+		<!-- 从  订单日期yyyy-MM-dd -->
+		<if test="params.dingbegintime!=null and params.dingbegintime!='' and  (params.dingendtime == null or params.dingendtime =='')">
+			and dr.order_data <![CDATA[>= ]]> '${params.dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${params.dingbegintime} 23:59:59' 
+		</if>
+		<if test="params.dingbegintime!=null and params.dingbegintime!='' and  params.dingendtime != null  and params.dingendtime !=''">
+			and dr.order_data <![CDATA[>= ]]> '${params.dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${params.dingendtime} 23:59:59' 
+		</if> 
+
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and dr.deal_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+			<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		ORDER BY dr.order_data desc	
+	</select>
+	<!--交易成功率查询 -->
+	<select id="percentlist" resultType="map" parameterType="Page">
+		SELECT dr.deal_type,FORMAT(SUM(IF(dr.STATUS=0,1,0))/COUNT(dr.serial)*100,2) AS S,FORMAT(SUM(IF(dr.STATUS=1,1,0))/COUNT(dr.serial)*100,2)  AS E,FORMAT(SUM(IF(dr.STATUS=2,1,0))/COUNT(dr.serial)*100,2) AS U,COUNT(dr.serial),c.client_no,c.client_name,bp.pro_name 
+		FROM deal_record dr
+		LEFT JOIN busi_product bp on dr.deal_type  = bp.pro_no
+		LEFT JOIN client_base c ON dr.client_no=c.client_no
+		LEFT JOIN agent a ON c.agent_no=a.agent_no
+		LEFT JOIN accounts ac ON dr.client_no=ac.object_id
+		LEFT JOIN channel_details cd ON cd.c_id=dr.bid
+		LEFT JOIN channel_parent cp ON cp.id = cd.c_pid	
+		LEFT JOIN deal_profit dp on dp.serial = dr.serial
+		where 1=1
+		<if test="params.client_no!=null and params.client_no!=''">
+			and dr.client_no=#{params.client_no}
+		</if>
+		<if test="params.req_did!=null and params.req_did!=''">
+			and dr.req_did=#{params.req_did}
+		</if>
+		<if test="params.serial!=null and params.serial!=''">
+			and dr.serial=#{params.serial}
+		</if>
+		<if test="params.bank_serial!=null and params.bank_serial!=''">
+			and dr.bank_serial=#{params.bank_serial}
+		</if>
+		<if test="params.client_name!=null and params.client_name!=''">
+			and c.client_name like '%${params.client_name}%'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and a.agent_no=#{params.agent_no}
+		</if>
+		<if test="params.deal_type!=null and params.deal_type!=''">
+			and dr.deal_type=#{params.deal_type}
+		</if>
+		<if test="params.pay_status!=null and params.pay_status!=''">
+			and dr.pay_status=#{params.pay_status}
+		</if>
+		<if test="params.liquidation!=null and params.liquidation!=''">
+			and dr.liquidation=#{params.liquidation}
+		</if>
+		<if test="params.bid!=null and params.bid!=''">
+			and dr.bid=#{params.bid}
+		</if>
+		<if test="params.tbid!=null and params.tbid!=''">
+			and cp.id=#{params.tbid}
+		</if>
+		<!-- 从  订单日期yyyy-MM-dd -->
+		<if test="params.dingbegintime!=null and params.dingbegintime!='' and  (params.dingendtime == null or params.dingendtime =='')">
+			and dr.order_data <![CDATA[>= ]]> '${params.dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${params.dingbegintime} 23:59:59' 
+		</if>
+		<if test="params.dingbegintime!=null and params.dingbegintime!='' and  params.dingendtime != null  and params.dingendtime !=''">
+			and dr.order_data <![CDATA[>= ]]> '${params.dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${params.dingendtime} 23:59:59' 
+		</if> 
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and dr.deal_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+			<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		GROUP BY dr.deal_type	
+	</select>
+	<select id="getOne" resultType="com.lv.entity.DealRecord" parameterType="int">
+		select * from deal_record where serial=#{id}
+	</select>
+	<insert id="insert">
+	insert into deal_record(check_status,status,client_no,deal_type,deal_date,pay_status,amount,bank_card,bank_serial,serial,bid,check_value,deal_time)
+	 values(#{check_status},#{status},#{client_no},#{deal_type},#{deal_date},#{pay_status},#{amount},#{bank_card},#{bank_serial},#{serial},#{bid},#{check_value},#{deal_time})
+	</insert>
+	<update id="update"  parameterType="int">
+	update deal_record set check_status=#{check_status},status=#{status},client_no=#{client_no},deal_type=#{deal_type},deal_date=#{deal_date},pay_status=#{pay_status},amount=#{amount},bank_card=#{bank_card},bank_serial=#{bank_serial},serial=#{serial},bid=#{bid},check_value=#{check_value},deal_time=#{deal_time} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from deal_record where Id=#{id}
+	</delete>
+	<!--交易明细汇总 -->
+	<select id="getcountList" resultType="map" parameterType="Page">
+		SELECT SUM(dr.amount) ant FROM deal_record dr
+		LEFT JOIN busi_product bp on dr.deal_type  = bp.pro_no
+		LEFT JOIN client_base c ON dr.client_no=c.client_no
+		LEFT JOIN agent a ON c.agent_no=a.agent_no
+		LEFT JOIN accounts ac ON dr.client_no=ac.object_id
+		LEFT JOIN channel_details cd ON cd.c_id=dr.bid
+		LEFT JOIN channel_parent cp ON cp.id = cd.c_pid	
+		LEFT JOIN deal_profit dp on dp.serial = dr.serial
+		where 1=1
+		<if test="client_no!=null and client_no!=''">
+			and dr.client_no=#{client_no}
+		</if>
+		<if test="req_did!=null and req_did!=''">
+			and dr.req_did=#{req_did}
+		</if>
+		<if test="serial!=null and serial!=''">
+			and dr.serial=#{serial}
+		</if>
+		<if test="bank_serial!=null and bank_serial!=''">
+			and dr.bank_serial=#{bank_serial}
+		</if>
+		<if test="client_name!=null and client_name!=''">
+			and c.client_name like '%${client_name}%'
+		</if>
+		<if test="agent_no!=null and agent_no!=''">
+			and a.agent_no=#{agent_no}
+		</if>
+		<if test="deal_type!=null and deal_type!=''">
+			and dr.deal_type=#{deal_type}
+		</if>
+		<if test="status!=null and status!=''">
+			and dr.status=#{status}
+		</if>
+		<if test="pay_status!=null and pay_status!=''">
+			and dr.pay_status=#{pay_status}
+		</if>
+		<if test="check_status!=null and check_status!=''">
+			and dr.check_status=#{check_status}
+		</if>
+		<if test="liquidation!=null and liquidation!=''">
+			and dr.liquidation=#{liquidation}
+		</if>
+		<if test="bid!=null and bid!=''">
+			and dr.bid=#{bid}
+		</if>
+		<if test="tbid!=null and tbid!=''">
+			and cp.id=#{tbid}
+		</if>
+		<!-- 从  订单日期yyyy-MM-dd -->
+		<if test="dingbegintime!=null and dingbegintime!='' and  (dingendtime == null or dingendtime =='')">
+			and dr.order_data <![CDATA[>= ]]> '${dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${dingbegintime} 23:59:59' 
+		</if>
+		<if test="dingbegintime!=null and dingbegintime!='' and  dingendtime != null  and dingendtime !=''">
+			and dr.order_data <![CDATA[>= ]]> '${dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${dingendtime} 23:59:59' 
+		</if> 
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			and dr.deal_date <![CDATA[>= ]]> '${begintime}'
+		</if>
+			<!-- 到   日期yyyy-MM-dd-->
+		<if test="endtime!=null and endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${endtime}'
+		</if>
+	</select>
+	<!--交易成功率查询 -->
+	<select id="getpercentList" resultType="map" parameterType="Page">
+		SELECT ROUND((SUM(IF(dr.STATUS=0,1,0))/COUNT(dr.serial))*100,2) as pre  
+		FROM deal_record dr
+		LEFT JOIN busi_product bp on dr.deal_type  = bp.pro_no
+		LEFT JOIN client_base c ON dr.client_no=c.client_no
+		LEFT JOIN agent a ON c.agent_no=a.agent_no
+		LEFT JOIN accounts ac ON dr.client_no=ac.object_id
+		LEFT JOIN channel_details cd ON cd.c_id=dr.bid
+		LEFT JOIN channel_parent cp ON cp.id = cd.c_pid	
+		LEFT JOIN deal_profit dp on dp.serial = dr.serial
+		where 1=1
+		<if test="client_no!=null and client_no!=''">
+			and dr.client_no=#{client_no}
+		</if>
+		<if test="req_did!=null and req_did!=''">
+			and dr.req_did=#{req_did}
+		</if>
+		<if test="serial!=null and serial!=''">
+			and dr.serial=#{serial}
+		</if>
+		<if test="bank_serial!=null and bank_serial!=''">
+			and dr.bank_serial=#{bank_serial}
+		</if>
+		<if test="client_name!=null and client_name!=''">
+			and c.client_name like '%${client_name}%'
+		</if>
+		<if test="agent_no!=null and agent_no!=''">
+			and a.agent_no=#{agent_no}
+		</if>
+		<if test="deal_type!=null and deal_type!=''">
+			and dr.deal_type=#{deal_type}
+		</if>
+		<if test="pay_status!=null and pay_status!=''">
+			and dr.pay_status=#{pay_status}
+		</if>
+		<if test="check_status!=null and check_status!=''">
+			and dr.check_status=#{check_status}
+		</if>
+		<if test="liquidation!=null and liquidation!=''">
+			and dr.liquidation=#{liquidation}
+		</if>
+		<if test="bid!=null and bid!=''">
+			and dr.bid=#{bid}
+		</if>
+		<if test="tbid!=null and tbid!=''">
+			and cp.id=#{params.tbid}
+		</if>
+		<!-- 从  订单日期yyyy-MM-dd -->
+		<if test="dingbegintime!=null and dingbegintime!='' and  (dingendtime == null or dingendtime =='')">
+			and dr.order_data <![CDATA[>= ]]> '${dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${dingbegintime} 23:59:59' 
+		</if>
+		<if test="dingbegintime!=null and dingbegintime!='' and  dingendtime != null  and dingendtime !=''">
+			and dr.order_data <![CDATA[>= ]]> '${dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${dingendtime} 23:59:59' 
+		</if> 
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			and dr.deal_date <![CDATA[>= ]]> '${begintime}'
+		</if>
+			<!-- 到   日期yyyy-MM-dd-->
+		<if test="endtime!=null and endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${endtime}'
+		</if>
+	</select>	
+	<!-- 导出交易明细信息 -->
+	<select id="exportClientRecordSql" resultType="map" parameterType="map">
+		SELECT dr.*,bp.pro_name,c.client_name,a.agent_name,ac.account_name,ac.account_card_no,ac.account_bank_name,cp.name,dp.client_charge,dp.client_rate,dp.settlement
+		FROM deal_record dr
+		LEFT JOIN busi_product bp on dr.deal_type  = bp.pro_no
+		LEFT JOIN client_base c ON dr.client_no=c.client_no
+		LEFT JOIN agent a ON c.agent_no=a.agent_no
+		LEFT JOIN accounts ac ON dr.client_no=ac.object_id
+		LEFT JOIN channel_details cd ON cd.c_id=dr.bid
+		LEFT JOIN channel_parent cp ON cp.id = cd.c_pid	
+		LEFT JOIN deal_profit dp on dp.serial = dr.serial
+		where 1=1 
+		<if test="client_no!=null and client_no!=''">
+			and dr.client_no=#{client_no}
+		</if>
+		<if test="req_did!=null and req_did!=''">
+			and dr.req_did=#{req_did}
+		</if>
+		<if test="serial!=null and serial!=''">
+			and dr.serial=#{serial}
+		</if>
+		<if test="bank_serial!=null and bank_serial!=''">
+			and dr.bank_serial=#{bank_serial}
+		</if>
+		<if test="client_name!=null and client_name!=''">
+			and c.client_name like '%${client_name}%'
+		</if>
+		<if test="agent_no!=null and agent_no!=''">
+			and a.agent_no=#{agent_no}
+		</if>
+		<if test="deal_type!=null and deal_type!=''">
+			and dr.deal_type=#{deal_type}
+		</if>
+		<if test="status!=null and status!=''">
+			and dr.status=#{status}
+		</if>
+		<if test="pay_status!=null and pay_status!=''">
+			and dr.pay_status=#{pay_status}
+		</if>
+		<if test="liquidation!=null and liquidation!=''">
+			and dr.liquidation=#{liquidation}
+		</if>
+		<if test="bid!=null and bid!=''">
+			and dr.bid=#{bid}
+		</if>
+		<if test="tbid!=null and tbid!=''">
+			and cp.id=#{tbid}
+		</if>
+		<!-- 从  订单日期yyyy-MM-dd -->
+		<if test="dingbegintime!=null and dingbegintime!='' and  (dingendtime == null or dingendtime =='')">
+			and dr.order_data <![CDATA[>= ]]> '${dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${dingbegintime} 23:59:59' 
+		</if>
+		<if test="dingbegintime!=null and dingbegintime!='' and  dingendtime != null  and dingendtime !=''">
+			and dr.order_data <![CDATA[>= ]]> '${dingbegintime} 00:00:00' and dr.order_data <![CDATA[<= ]]> '${dingendtime} 23:59:59' 
+		</if> 
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			and dr.deal_date <![CDATA[>= ]]> '${begintime}'
+		</if>
+			<!-- 到   日期yyyy-MM-dd-->
+		<if test="endtime!=null and endtime!=''">
+			and dr.deal_date <![CDATA[<= ]]> '${endtime}'
+		</if>	
+	</select>	
+	<!-- 获取交易地理位置 -->
+	<select id="allMapaddress" resultType="map" parameterType="String">
+		SELECT dr.* FROM deal_record dr
+		where dr.serial in
+		 <foreach collection="array" item="ids" index="index"
+            open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+	</select>
+	<!-- 清算 -->
+	<select id="clearDeal" resultType="map" statementType="CALLABLE" parameterType="String">
+		CALL ser_liquidation(#{serial},#{mode=OUT,jdbcType=BIGINT})
+	</select>
+</mapper> 
+

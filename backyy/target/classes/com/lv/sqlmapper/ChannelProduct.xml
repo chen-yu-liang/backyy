@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChannelProduct">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT cpt.*,cp.name FROM tbid_product cpt  LEFT JOIN channel_parent cp ON cpt.tbid = cp.id
+		where 1=1
+		<if test="params.tbid!=null and params.tbid!=''">
+			and cpt.tbid = '${params.tbid}'
+		</if>
+		<if test="params.id!=null and params.id!=''">
+			and cp.id = '${params.id}'
+		</if>
+	</select>
+	<select id="getChannelProduct" resultType="map" parameterType="Page">
+		SELECT cpt.*,cp.name FROM tbid_product cpt  LEFT JOIN channel_parent cp ON cpt.tbid = cp.id
+		where 1=1
+		<if test="params.tbid!=null and params.tbid!=''">
+			and cpt.tbid = '${params.tbid}'
+		</if>
+		<if test="params.id!=null and params.id!=''">
+			and cp.id = '${params.id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ChannelProduct" parameterType="int">
+		select * from channel_product where Id=#{id}
+	</select>
+	<select id="getOneChannelProduct" resultType="com.lv.entity.ChannelProduct" parameterType="com.lv.entity.ChannelProduct">
+		select * from tbid_product where tbid=#{tbid} and product_no=#{product_no}
+	</select>
+	<insert id="insert">
+	insert into tbid_product(tbid,product_no,clear_type,card_type,rate)
+	 values(#{tbid},#{product_no},#{clear_type},#{card_type},#{rate})
+	</insert>
+	<update id="update"  parameterType="int">
+	update ChannelProduct set t_id=#{t_id},channel_product_name=#{channel_product_name},channel_product_no=#{channel_product_no},add_time=#{add_time} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from channel_product where Id=#{id}
+	</delete>
+	<delete id="deleteChannelProduct" parameterType="int">
+		delete from channel_product where t_id=#{id}
+	</delete>
+</mapper> 
+

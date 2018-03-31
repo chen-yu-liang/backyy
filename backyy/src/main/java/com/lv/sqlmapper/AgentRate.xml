@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgentRate">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from agent_rate where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and agent_no = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.AgentRate" parameterType="int">
+		select * from agent_rate where agent_no=#{agent_no}
+	</select>
+	<insert id="insert">
+	insert into agent_rate(s0_rate_min,d1_rate_max,agent_no,d1_rate_min,s0_rate_max)
+	 values(#{s0_rate_min},#{d1_rate_max},#{agent_no},#{d1_rate_min},#{s0_rate_max})
+	</insert>
+	<update id="update"  parameterType="int">
+	update agent_rate set s0_rate_min=#{s0_rate_min},d1_rate_max=#{d1_rate_max},agent_no=#{agent_no},d1_rate_min=#{d1_rate_min},s0_rate_max=#{s0_rate_max} where agent_no=#{agent_no}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from agent_rate where agent_no=#{agent_no}
+	</delete>
+</mapper> 
+

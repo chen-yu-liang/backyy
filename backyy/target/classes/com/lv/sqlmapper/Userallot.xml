@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Userallot">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from userallot where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.Userallot" parameterType="int">
+		select * from userallot where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into Userallot(carte_name,carte_id,admin_all_id,admin_id,belong_terrace,allot_sign)
+	 values(#{carte_name},#{carte_id},#{admin_all_id},#{admin_id},#{belong_terrace},#{allot_sign})
+	</insert>
+	<update id="update"  parameterType="int">
+	update Userallot set carte_name=#{carte_name},carte_id=#{carte_id},admin_all_id=#{admin_all_id},admin_id=#{admin_id},belong_terrace=#{belong_terrace},allot_sign=#{allot_sign} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from userallot where Id=#{id}
+	</delete>
+	<!-- 依靠admin_id删除菜单权限映射表 -->
+	<delete id="deleteCarteById" parameterType="String">
+		delete from userallot where admin_id=#{admin_id}
+	</delete>
+	<!-- 添加用户菜单权限映射表 -->
+	<insert id = "insertInUserallot" parameterType="map">
+		insert into userallot(admin_id,carte_id)
+		select #{admin_id},id from carte where id in  
+		<foreach item="item" collection="array" open="("  
+            separator="," close=")">
+            #{item}
+        </foreach>
+	</insert>
+</mapper> 
+

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgentRequest">
+	<select id="getPageList" resultType="map" parameterType="Page">
+SELECT ar.id,ar.agent_no,ar.version,ar.tran_cd,ar.pay_acct_no,ar.pay_acct_nm,
+ar.pay_acct_tp,ar.tran_seq,ar.pay_bank_no,ar.tran_amt,ar.pay_tm,ar.org_tran_seq,
+ar.ip FROM agent_request ar WHERE 1=1
+		<if test="params.tran_seq!=null and params.tran_seq!=''">
+			and ar.tran_seq = '${params.tran_seq}'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and ar.agent_no = '${params.agent_no}'
+		</if>
+		<if test="params.pay_acct_no!=null and params.pay_acct_no!=''">
+			and ar.pay_acct_no = '${params.pay_acct_no}'
+		</if>
+		<if test="params.pay_acct_nm!=null and params.pay_acct_nm!=''">
+			and ar.pay_acct_nm like '%${params.pay_acct_nm}%'
+		</if>
+			<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			<!-- 到   日期yyyy-MM-dd-->
+			<if test="params.endtime!=null and params.endtime!=''">
+				and DATE(ar.pay_tm) <![CDATA[>= ]]> '${params.begintime}' and DATE(ar.pay_tm) <![CDATA[<= ]]> '${params.endtime}'
+			</if>
+			<if test="params.endtime == null or params.endtime ==''">
+				and DATE(ar.pay_tm) <![CDATA[= ]]> '${params.begintime}' 
+			</if>
+		</if>
+		<if test="params.tran_cd!=null and params.tran_cd!=''">
+			and ar.tran_cd = '${params.tran_cd}'
+		</if>
+		order by ar.id desc
+	</select>
+	<select id="getOne" resultType="com.lv.entity.AgentRequest" parameterType="int">
+		select * from agent_request where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into AgentRequest(org_tran_seq,pay_acct_tp,verifystring,tran_seq,pay_tm,ip,version,pay_acct_nm,pay_acct_no,tran_cd,mchnt_cd,pay_bank_nm,agent_no,tran_amt,pay_bank_no)
+	 values(#{org_tran_seq},#{pay_acct_tp},#{verifystring},#{tran_seq},#{pay_tm},#{ip},#{version},#{pay_acct_nm},#{pay_acct_no},#{tran_cd},#{mchnt_cd},#{pay_bank_nm},#{agent_no},#{tran_amt},#{pay_bank_no})
+	</insert>
+	<update id="update"  parameterType="int">
+	update AgentRequest set org_tran_seq=#{org_tran_seq},pay_acct_tp=#{pay_acct_tp},verifystring=#{verifystring},tran_seq=#{tran_seq},pay_tm=#{pay_tm},ip=#{ip},version=#{version},pay_acct_nm=#{pay_acct_nm},pay_acct_no=#{pay_acct_no},tran_cd=#{tran_cd},mchnt_cd=#{mchnt_cd},pay_bank_nm=#{pay_bank_nm},agent_no=#{agent_no},tran_amt=#{tran_amt},pay_bank_no=#{pay_bank_no} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from agent_request where Id=#{id}
+	</delete>
+</mapper> 
+

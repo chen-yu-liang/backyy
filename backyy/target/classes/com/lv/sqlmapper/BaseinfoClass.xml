@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BaseinfoClass">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from baseinfo_class where 1=1
+		<if test="params.class_cn!=null and params.class_cn!=''">
+			and class_cn like '%${params.class_cn}%'
+	    </if>
+		<if test="params.class_en!=null and params.class_en!=''">
+			and class_en like '%${params.class_en}%'
+	    </if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.BaseinfoClass" parameterType="int">
+		select * from baseinfo_class where Id=#{id}
+	</select>
+	<select id="getOneByClassEn" resultType="com.lv.entity.BaseinfoClass" parameterType="int">
+		select * from baseinfo_class where class_en=#{class_en}
+	</select>
+	<!--autoCompelete 用LinkedHashMap 严格控制MAP循环key按顺序来,字段as 大写，是为了保证Map只有一份结果，mybaits返回MAP默认返回两分结果，一组FIELD大写，一组field小写 -->
+	<!--结果MAP返回的时候，当字段名值为NULL的时候，那么MAp中不会存在此FIELD的KEY，用ISNULL处理当NULL时候，返回""值 -->
+	<select id="getAutoList" parameterType="map" resultType="java.util.LinkedHashMap">
+		SELECT 
+		class_en as 'CLASS_EN',class_cn AS 'CLASS_CN',if(parent_ens is null,class_en,concat(parent_ens,",",class_en)) as "PARENT_ENS" 
+		from baseinfo_class where 1=1 
+		<if test="class_cn!=null and class_cn!=''">
+			and class_cn like '%${class_cn}%'
+	    </if>
+	    <if test="class_en!=null and class_en!=''">
+			and class_en like '%${class_en}%'
+	    </if>
+	     limit 0,10 
+	</select>
+	<!-- 添加基本信息 -->
+	<insert id="insert">
+		insert into baseinfo_class(class_en,class_cn,note,addname,addtime,status) 
+		values(#{class_en},#{class_cn},#{note},#{addname},now(),#{status})
+	</insert>
+	<!-- 修改基本信息 -->
+	<update id="update">
+		update baseinfo_class set class_cn=#{class_cn},note=#{note},status=#{status} where id=#{id}
+	</update>
+	<!-- 删除基本信息 -->
+	<delete id="delete" parameterType="int">
+		delete from baseinfo_class
+		where Id=#{id}
+	</delete>
+	
+	<select id="class_en_num" parameterType="String" resultType="int">
+	   select count(*) as num from baseinfo_class where class_en=#{class_en}
+	</select>
+</mapper> 

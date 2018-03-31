@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/FilesInfos
+END
+list.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/FilesInfos/list.ftl
+END
+flist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/FilesInfos/flist.ftl
+END
+add.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/FilesInfos/add.ftl
+END

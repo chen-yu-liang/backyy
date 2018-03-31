@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MakeCardTotal">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from make_card_total where 1=1
+		<if test="params.batch_no!=null and params.batch_no!=''">
+			and batch_no = '${params.batch_no}'
+		</if>
+		<if test="params.client_no_start_num!=null and params.client_no_start_num!=''">
+			and client_no_start_num <![CDATA[>= ]]>  '${params.client_no_start_num}'
+		</if>
+		<if test="params.client_no_end_num!=null and params.client_no_end_num!=''">
+			and client_no_end_num <![CDATA[<= ]]> '${params.client_no_end_num}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and add_time <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and add_time <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.MakeCardTotal" parameterType="int">
+		select * from make_card_total where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into make_card_total(client_no_start_num,card_num,cost_card,add_time,batch_no,cost,client_no_end_num,ismake)
+	 values(#{client_no_start_num},#{card_num},#{cost_card},#{add_time},#{batch_no},#{cost},#{client_no_end_num},#{ismake})
+	</insert>
+	<update id="update"  parameterType="int">
+		update make_card_total set client_no_start_num=#{client_no_start_num},card_num=#{card_num},cost_card=#{cost_card},add_time=#{add_time},batch_no=#{batch_no},cost=#{cost},client_no_end_num=#{client_no_end_num} where Id=#{id}
+	</update>
+	<!-- 修改是否制卡标识 -->
+	<update id="updateIsMake"  parameterType="String">
+		update make_card_total set ismake=1 where batch_no=#{batch_no}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from make_card_total where Id=#{id}
+	</delete>
+	<!-- 获得最大商户号 -->
+	<select id="getClientNO" resultType="int" parameterType="int">
+		select max(client_no) from make_card 
+	</select>
+	<!-- 获得最大制卡批次号 -->
+	<select id="getMaxBatchNo" resultType="String" parameterType="String">
+		select max(batch_no) from make_card_total where add_time=#{day}
+	</select>
+	
+	<!--汇总 -->
+	<select id="getcountList" resultType="map" parameterType="Page">
+		select sum(card_num) cum, sum(cost) sco from make_card_total where 1=1
+		<if test="batch_no!=null and batch_no!=''">
+			and batch_no = '${batch_no}'
+		</if>
+		<if test="client_no_start_num!=null and client_no_start_num!=''">
+			and client_no_start_num <![CDATA[>= ]]>  '${client_no_start_num}'
+		</if>
+		<if test="client_no_end_num!=null and client_no_end_num!=''">
+			and client_no_end_num <![CDATA[<= ]]> '${client_no_end_num}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			and add_time <![CDATA[>= ]]> '${begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="endtime!=null and endtime!=''">
+			and add_time <![CDATA[<= ]]> '${endtime}'
+		</if>
+	</select>
+</mapper> 
+

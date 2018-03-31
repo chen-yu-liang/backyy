@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users
+END
+exceptionPage.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/exceptionPage.ftl
+END
+list.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/list.ftl
+END
+suggestAgentInfo.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/suggestAgentInfo.ftl
+END
+goLogin.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/goLogin.ftl
+END
+pageNotFind.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/pageNotFind.ftl
+END
+buttonPermission.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/buttonPermission.ftl
+END
+menu.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/menu.ftl
+END
+noPermission.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/noPermission.ftl
+END
+uploadLogo.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/uploadLogo.ftl
+END
+pass.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/pass.ftl
+END
+userpermission.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/userpermission.ftl
+END
+add.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/add.ftl
+END
+login.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/login.ftl
+END
+getClientInfo.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Users/getClientInfo.ftl
+END

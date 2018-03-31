@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DataPermission">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from data_permission where 1=1
+		<if test="params.carte_id!=null and params.carte_id!=''">
+			and carte_id = '${params.carte_id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.DataPermission" parameterType="int">
+		select * from data_permission where Id=#{id}
+	</select>
+	<insert id="insert">
+	 <selectKey resultType="int" keyProperty="id" order="BEFORE">
+  			select seq_data_permission.nextval from dual
+     </selectKey>
+	insert into data_permission(id,button_id,condition,status,show_model,name,carte_id,auto_data,auto_data_type,rim)
+	 values(#{id},#{button_id},#{condition},#{status},#{show_model},#{name},#{carte_id},#{auto_data},#{auto_data_type},#{rim})
+	</insert>
+	<update id="update"  parameterType="int">
+	  update data_permission set button_id=#{button_id},condition=#{condition},status=#{status},show_model=#{show_model},name=#{name},carte_id=#{carte_id},auto_data=#{auto_data},auto_data_type=#{auto_data_type},rim=#{rim} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from data_permission where Id=#{id}
+	</delete>
+</mapper> 
+

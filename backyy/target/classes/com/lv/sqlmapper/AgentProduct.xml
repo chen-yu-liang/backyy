@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgentProduct">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select ap.*,bp.pro_name from agent_product ap left join busi_product bp on ap.product_no = bp.pro_no
+		where 1=1
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and ap.agent_no= '${params.agent_no}'
+		</if>
+		<if test="params.product_no!=null and params.product_no!=''">
+			and ap.product_no= '${params.product_no}'
+		</if>
+		<if test="params.clear_type!=null and params.clear_type!=''">
+			and ap.clear_type= '${params.clear_type}'
+		</if>
+		<if test="params.status!=null and params.status!=''">
+			and ap.status= '${params.status}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.AgentProduct" parameterType="int">
+		select * from agent_product where Id=#{id}
+	</select>
+	<select id="getOneRateNo" resultType="com.lv.entity.AgentProduct" parameterType="map">
+		select * from agent_product where agent_no=#{agent_no} and product_no = #{product_no}
+	</select>
+	<insert id="insert">
+	insert into agent_product(rate,status,adddate,product_no,agent_no,card_type,clear_type)
+	 values(#{rate},#{status},#{adddate},#{product_no},#{agent_no},#{card_type},#{clear_type})
+	</insert>
+	<update id="update"  parameterType="com.lv.entity.AgentProduct">
+	update agent_product set rate=#{rate},status=#{status},adddate=#{adddate},product_no=#{product_no},agent_no=#{agent_no},card_type=#{card_type},clear_type=#{clear_type} where product_no=#{product_no} and agent_no=#{agent_no}
+	</update>
+	<delete id="deletepro" parameterType="map">
+		delete from agent_product where product_no=#{product_no} and agent_no=#{id} and clear_type=#{clear_type}
+	</delete>
+	<select id="getAllPro" resultType="com.lv.entity.AgentProduct" parameterType="map">
+		select * from agent_product where agent_no=#{id} 
+	</select>
+	<select id="getAllProduct" resultType="com.lv.entity.AgentProduct" parameterType="map">
+		select * from agent_product where agent_no=#{id} and product_no=#{product_no} and clear_type=#{clear_type}
+	</select>
+	<select id="getAgentProduct" resultType="com.lv.entity.AgentProduct" parameterType="com.lv.entity.AgentProduct">
+		select * from agent_product where agent_no='${agent_no}' and product_no='${product_no}' and clear_type='${clear_type}'
+	</select>
+	<update id="updateStatus"  parameterType="map">
+		update agent_product set status='${status}' where product_no='${product_no}' and agent_no='${id}' and clear_type='${clear_type}'
+	</update>
+	<!-- 获得该代理商下全部产品 -->
+	<select id="getClientbusiProduct" resultType="map" parameterType="String">
+		SELECT bp.* FROM agent_product ap LEFT JOIN busi_product bp ON ap.product_no = bp.pro_no where ap.agent_no = #{agent_no} 
+	</select>
+</mapper> 
+

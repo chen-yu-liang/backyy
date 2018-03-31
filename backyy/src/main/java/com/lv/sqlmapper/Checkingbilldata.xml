@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Checkingbilldata">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from checkingbilldata where 1=1
+		<if test="params.bill_no!=null and params.bill_no!=''">
+			and bill_no = '${params.bill_no}'
+		</if>
+		<if test="params.rrno!=null and params.rrno!=''">
+			and rrno = '${params.rrno}'
+		</if>
+		<if test="params.client_no!=null and params.client_no!=''">
+			and client_no = '${params.client_no}'
+		</if>
+			<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and trade_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and trade_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		order by trade_date desc
+	</select>
+	<select id="getOne" resultType="com.lv.entity.Checkingbilldata" parameterType="int">
+		select * from checkingbilldata where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into Checkingbilldata(trade_money,client_no,trade_status,trade_type,pan,account_name,trade_charage,revoke_num,trade_date,clear_money,reference_no,trade_time,bill_no,bid,serial)
+	 values(#{trade_money},#{client_no},#{trade_status},#{trade_type},#{pan},#{account_name},#{trade_charage},#{revoke_num},#{trade_date},#{clear_money},#{reference_no},#{trade_time},#{bill_no},#{bid},#{serial})
+	</insert>
+	<update id="update"  parameterType="int">
+	update Checkingbilldata set trade_money=#{trade_money},client_no=#{client_no},trade_status=#{trade_status},trade_type=#{trade_type},pan=#{pan},account_name=#{account_name},trade_charage=#{trade_charage},revoke_num=#{revoke_num},trade_date=#{trade_date},clear_money=#{clear_money},reference_no=#{reference_no},trade_time=#{trade_time},bill_no=#{bill_no},bid=#{bid},serial=#{serial} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from checkingbilldata where Id=#{id}
+	</delete>
+</mapper> 
+

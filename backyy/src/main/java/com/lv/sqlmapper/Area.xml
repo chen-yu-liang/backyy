@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Area">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from area where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.Area" parameterType="int">
+		select * from area where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into Area(area_id,area_code,area_name,area_status,parent_id)
+	 values(#{area_id},#{area_code},#{area_name},#{area_status},#{parent_id})
+	</insert>
+	<update id="update"  parameterType="int">
+	update Area set area_id=#{area_id},area_code=#{area_code},area_name=#{area_name},area_status=#{area_status},parent_id=#{parent_id} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from area where Id=#{id}
+	</delete>
+	<!-- 获取省市联动 -->
+	<select id="getArea" resultType="map" parameterType="map">
+		select * from area where parent_id=#{parent_id} order by area_id
+	</select>
+	<!-- 获取地区名字-->
+	<select id="getAreaName" resultType="String" parameterType="map">
+		select area_name from area where area_id=${area_id}
+	</select>
+</mapper> 
+

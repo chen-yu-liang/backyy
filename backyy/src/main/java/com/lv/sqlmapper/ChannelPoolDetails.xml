@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChannelPoolDetails">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		 SELECT cpd.c_bid,cd.c_level,cd.settleType,cd.status FROM channel_pool_details cpd 
+		 LEFT JOIN channel_details cd ON cpd.c_bid = cd.c_id
+		 WHERE 1=1
+		<if test="params.c_bid!=null and params.c_bid!=''">
+			and cpd.c_bid = '${params.c_bid}'
+		</if>
+		<if test="params.c_pid!=null and params.c_pid!=''">
+			and cpd.c_pid = '${params.c_pid}'
+		</if>
+	</select>
+	<select id="selectChnnnelPoll" resultType="com.lv.entity.ChannelPoolDetails" parameterType="map">
+		select * from channel_pool_details where c_bid=#{c_bid} and c_pid = #{c_pid}
+	</select>
+	<insert id="saveChnnnelPoll" parameterType="map">
+		insert into channel_pool_details(c_pid,c_bid,t_bid)
+		 values (#{c_pid},#{c_bid},#{t_bid})
+	</insert>
+	<update id="updateChnnnelPoll"  parameterType="map">
+		update channel_pool_details set c_bid=#{c_bid} where c_bid=#{c_bid}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from channel_pool_details where c_bid=#{id}
+	</delete>
+</mapper> 
+

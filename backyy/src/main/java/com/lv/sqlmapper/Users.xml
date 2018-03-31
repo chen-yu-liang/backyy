@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Users">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from users where 1=1 
+		<if test="params.cn_name!=null and params.cn_name!=''">
+			and cn_name like '%${params.cn_name}%'
+		</if>
+		<if test="params.user_name!=null and params.user_name!=''">
+			and user_name like '%${params.user_name}%'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.Users" parameterType="String">
+		select * from users where id=#{id}
+	</select>
+	<select id="getAgentUser" resultType="com.lv.entity.Users" parameterType="String">
+		select * from users where user_name=#{agent_no}
+	</select>
+	<!-- 登录判断 -->
+	<select id="loginUsers" resultType="com.lv.entity.Users" parameterType="String" >
+ 		select * from users where user_name = #{user_name} and user_role = 0
+ 	</select>
+ 	<!-- 添加用户信息 -->
+	<insert id="insert">
+		insert into users(status,user_name,addtime,cn_name,addname,user_pass,isadmin,login_count,update_password,user_role,belong_user)
+		values(#{status},#{user_name},now(),#{cn_name},#{addname},#{user_pass},#{isadmin},#{login_count},#{update_password},#{user_role},#{belong_user})
+	</insert>
+	<!-- 修改用户信息 -->
+	<update id="update"  parameterType="int">
+		update users set status=#{status},user_name=#{user_name},cn_name=#{cn_name},isadmin=#{isadmin},user_role=#{user_role},belong_user=#{belong_user}
+		<if test="user_pass!=null and user_pass!=''">
+			,user_pass=#{user_pass} 
+		</if>
+		where id=#{id}
+	</update>
+	<!-- 修改用户密码 -->
+	<update id="update_password"  parameterType="int">
+		update users set user_pass=#{user_pass},update_password=update_password+1 where Id=#{id}
+	</update>
+	<!-- 登录时更改用户信息 -->
+	<update id="loginRecord"  parameterType="int">
+	update users set last_ip=#{last_ip},login_count=#{login_count},last_date=now() where Id=#{id}
+	</update>
+	<!-- 添加用户信息 -->
+	<insert id="addUsers">
+		insert into users(user_name) values('1')
+	</insert>
+	<!-- 依靠id删除用户 -->
+	<delete id="delete" parameterType="int">
+		delete from users where Id=#{id}
+	</delete>
+	<select id="user_name" parameterType="String" resultType="int">
+	   select count(*) as num from users where user_name=#{user_name}
+	</select>
+	<!-- 获取所有用户 -->
+	<select id="getAllUsers" resultType="map" parameterType="int">
+		select * from users where 1=#{i}
+	</select>
+	<!-- 查询所有代理商信息 -->
+<!-- 	<select id="getAgentInfo" resultType="map" parameterType="Page"> -->
+<!-- 		select * from agent where agent_level in (${params.sign}) -->
+		<!-- 代理商编号 -->
+<!-- 		<if test="params.agent_no!=null and params.agent_no!=''"> -->
+<!-- 			and agent_no = '${params.agent_no}' -->
+<!-- 		</if> -->
+		<!-- 代理商名称 -->
+<!-- 		<if test="params.agent_name!=null and params.agent_name!=''"> -->
+<!-- 			and agent_name like '%${params.agent_name}%' -->
+<!-- 		</if> -->
+		<!-- 联系人 -->
+<!-- 		<if test="params.person!=null and params.person!=''"> -->
+<!-- 			and person like '%${params.person}%' -->
+<!-- 		</if> -->
+		<!-- 联系人电话 -->
+<!-- 		<if test="params.mobile!=null and params.mobile!=''"> -->
+<!-- 			and mobile = '${params.mobile}' -->
+<!-- 		</if> -->
+		<!-- 所属代理商 -->
+<!-- 		<if test="params.belong_agent!=null and params.belong_agent!=''"> -->
+<!-- 			and belong_agent = '${params.belong_agent}' -->
+<!-- 		</if> -->
+<!-- 	</select> -->
+	<!-- 查询该用户所属代理商信息 -->
+<!-- 	<select id ="selectUserAgent" resultType="com.lv.entity.AgentInfo" parameterType="map"> -->
+<!-- 		select * from agent_info where agent_num = #{agent_num} -->
+<!-- 	</select> -->
+</mapper> 
+

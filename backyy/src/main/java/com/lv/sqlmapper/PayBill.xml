@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PayBill">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from pay_bill where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.PayBill" parameterType="int">
+		select * from pay_bill where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into PayBill(remark,clear_date,total_sum,bill_no,total_money)
+	 values(#{remark},#{clear_date},#{total_sum},#{bill_no},#{total_money})
+	</insert>
+	<update id="update"  parameterType="int">
+	update PayBill set remark=#{remark},clear_date=#{clear_date},total_sum=#{total_sum},bill_no=#{bill_no},total_money=#{total_money} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from pay_bill where Id=#{id}
+	</delete>
+</mapper> 
+

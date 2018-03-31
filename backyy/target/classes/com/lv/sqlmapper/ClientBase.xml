@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientBase">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT cb.*,c.c_id,cp.name,a.agent_name,c2p.code_status FROM client_base cb 
+		LEFT JOIN  client_binding cd  ON cb.client_no = cd.client_no
+		LEFT JOIN channel_details c ON c.c_id = cd.bid 
+		LEFT JOIN channel_parent cp ON cp.id = c.c_pid 
+		LEFT JOIN agent a ON a.agent_no = cb.agent_no
+		LEFT JOIN code2pay c2p ON cb.client_no = c2p.client_no
+		where 1=1
+		<if test="params.status!=null and params.status!=''">
+			and cb.status = '${params.status}'
+		</if>
+		<if test="params.client_no!=null and params.client_no!=''">
+			and cb.client_no = '${params.client_no}'
+		</if>
+		<if test="params.client_name!=null and params.client_name!=''">
+			and cb.client_name like '${params.client_name}'
+		</if>
+		<if test="params.person!=null and params.person!=''">
+			and cb.person = '${params.person}'
+		</if>
+		<if test="params.client_level!=null and params.client_level!=''">
+			and cb.client_level = '${params.client_level}'
+		</if>
+		<if test="params.rate_no!=null and params.rate_no!=''">
+			and cb.rate_no = '${params.rate_no}'
+		</if>
+		<if test="params.client_type!=null and params.client_type!=''">
+			and cb.client_type = '${params.client_type}'
+		</if>
+		<if test="params.c_id!=null and params.c_id!=''">
+			and c.c_id = '${params.c_id}'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and cb.agent_no = '${params.agent_no}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and cb.add_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and cb.add_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		order by cb.add_date desc
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ClientBase" parameterType="int">
+		select * from client_base where client_no=#{id}
+	</select>
+	<select id="getAClient" resultType="com.lv.entity.ClientBase" parameterType="map">
+		select * from client_base where client_no=#{id}
+	</select>
+	<!-- 查询商户信息 -->
+	<select id="getOneClientBase" resultType="com.lv.entity.ClientBase" parameterType="String">
+		select * from client_base where client_no=#{client_no}
+	</select>
+	<!-- 查询最大商户号 -->
+	<select id="getoneclient" resultType="String" >
+		select max(client_no) from client_base where client_type=1
+	</select>
+	<insert id="insert" parameterType="map">
+	insert into client_base(person,status,add_date,client_no,client_uuid,city,area,we_unionid,province,client_level,agent_no,client_name,mobile,client_type,idcard,pay_key)
+	 values(#{person},#{status},#{add_date},#{client_no},#{client_uuid},#{city},#{area},#{we_unionid},#{province},#{client_level},#{agent_no},#{client_name},#{mobile},1,#{idcard},#{pay_key})
+	</insert>
+	<update id="update"  parameterType="int">
+	update client_base set person=#{person},city=#{city},area=#{area},province=#{province},client_level=#{client_level},agent_no=#{agent_no},client_name=#{client_name},mobile=#{mobile},client_type=#{client_type} where client_no=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from client_base where client_no=#{id}
+	</delete>
+	<!-- 修改普通商户为接口商户 -->
+	<update id="updatetype"  parameterType="String">
+	update client_base set client_type=#{client_type} where client_no=#{client_no}
+	</update>
+	<!-- 修改状态 -->
+	<update id="updateclientstatus"  parameterType="map">
+		update client_base set status=#{status} where client_no=#{id}
+	</update>
+	<!-- 批量商户信息 -->
+	<select id="getClist" resultType="map"  parameterType="Page">
+		select c.* from client_base c where c.client_no in
+		<foreach collection="array" item="ids" index="index"
+            open="(" close=")" separator=",">
+            #{ids}
+        </foreach> 
+	</select>
+	<!-- 查询联行名称-->
+	<select id="findBankNameByNo" resultType="String" >
+		select bank_name from bank_head where bank_num=#{bank_num}
+	</select>
+	<!-- 查询商户信息 -->
+	<select id="getClient" resultType="com.lv.entity.ClientBase" parameterType="String">
+		select * from client_base where client_no=#{client_no}
+	</select>
+	<!-- 修改商户费率 -->
+	<update id="updateRate"  parameterType="map">
+		update client_base set rate_no=#{rate_no} where client_no=#{client_no}
+	</update>
+	<!-- 批量导出商户，机构信息 -->
+	<select id="exportClientSql" resultType="map"  parameterType="String">
+		select a.agent_no,a.agent_name,a.agent_uuid,a.pay_key,cb.client_no,cb.client_name,cb.person,cb.client_uuid from agent a 
+		left join client_base cb on a.agent_no = cb.agent_no
+		where 
+		cb.client_no in
+		<foreach collection="array" item="ids" index="index"
+            open="(" close=")" separator=",">
+            #{ids}
+        </foreach> 
+	</select>
+	
+</mapper> 

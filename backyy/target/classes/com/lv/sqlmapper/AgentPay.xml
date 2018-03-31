@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgentPay">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select return_balance,tran_seq,order_seq,agent_no,FORMAT(pay_money,2) as pay_money,FORMAT(pay_charge,2) as pay_charge,pay_type,status,file_date,account_name,account_card_no,account_bank_name,account_bank_no,client_no from agent_pay where 1=1
+		<if test="params.order_seq!=null and params.order_seq!=''">
+			and order_seq = '${params.order_seq}'
+		</if>
+		<if test="params.tran_seq!=null and params.tran_seq!=''">
+			and tran_seq = '${params.tran_seq}'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and agent_no = '${params.agent_no}'
+		</if>
+		<if test="params.account_name!=null and params.account_name!=''">
+			and account_name like '%${params.account_name}%'
+		</if>
+			<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			<!-- 到   日期yyyy-MM-dd-->
+			<if test="params.endtime!=null and params.endtime!=''">
+				and DATE(file_date) <![CDATA[>= ]]> '${params.begintime}' and DATE(file_date) <![CDATA[<= ]]> '${params.endtime}'
+			</if>
+			<if test="params.endtime == null or params.endtime ==''">
+				and DATE(file_date) <![CDATA[= ]]> '${params.begintime}' 
+			</if>
+		</if>
+		<if test="params.return_balance!=null and params.return_balance!=''">
+			and return_balance = '${params.return_balance}'
+		</if>
+		<if test="params.status!=null and params.status!=''">
+			and status = '${params.status}'
+		</if>
+		order by file_date desc
+	</select>
+	<select id="getOne" resultType="com.lv.entity.AgentPay" parameterType="int">
+		select * from agent_pay where Id=#{id}
+	</select>
+	<resultMap type="java.util.HashMap" id="resultMap3">
+	 	<result column="ret_Str" property="retStr" javaType="java.lang.String" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 调账 -->
+	<select id="pay_return"  resultType="String" statementType="CALLABLE" parameterType="String">
+		<![CDATA[
+	        {#{b,jdbcType=VARCHAR,mode=OUT}=CALL add_agent_pay_return(#{tran_seq,jdbcType=VARCHAR,mode=IN},#{a,jdbcType=VARCHAR,mode=OUT})}
+		]]>
+	</select>
+	
+	<insert id="insert">
+	insert into AgentPay(pay_amount,order_seq,status,account_bank_no,tran_seq,file_date,account_name,pay_money,account_card_no,pay_type,pay_date,pay_charge,agent_no,account_bank_name,batch_no,account_type)
+	 values(#{pay_amount},#{order_seq},#{status},#{account_bank_no},#{tran_seq},#{file_date},#{account_name},#{pay_money},#{account_card_no},#{pay_type},#{pay_date},#{pay_charge},#{agent_no},#{account_bank_name},#{batch_no},#{account_type})
+	</insert>
+	<update id="update"  parameterType="int">
+	update AgentPay set pay_amount=#{pay_amount},order_seq=#{order_seq},status=#{status},account_bank_no=#{account_bank_no},tran_seq=#{tran_seq},file_date=#{file_date},account_name=#{account_name},pay_money=#{pay_money},account_card_no=#{account_card_no},pay_type=#{pay_type},pay_date=#{pay_date},pay_charge=#{pay_charge},agent_no=#{agent_no},account_bank_name=#{account_bank_name},batch_no=#{batch_no},account_type=#{account_type} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from agent_pay where Id=#{id}
+	</delete>
+</mapper> 
+

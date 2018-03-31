@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BalancePay">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT agent_proportion_money(bp.client_id) AS zai_amount,get_name(bp.client_id) AS agent_name,bp.* FROM balance_pay bp WHERE 1=1 AND bp.status != 0
+	<if test="params.client_id!=null and params.client_id!=''">
+		and client_id = '${params.client_id}'
+	</if>
+	<!-- 姓名模糊查询 -->
+	<if test="params.agent_name!=null and params.agent_name!=''">
+		and a.agent_name like '%${params.agent_name}%'
+	</if>
+	<!-- 从  日期yyyy-MM-dd -->
+	<if test="params.begintime!=null and params.begintime!=''">
+		and bp.action_date <![CDATA[>= ]]> '${params.begintime}'
+	</if>
+	<!-- 到   日期yyyy-MM-dd-->
+	<if test="params.endtime!=null and params.endtime!=''">
+		and bp.action_date <![CDATA[<= ]]> '${params.endtime}'
+	</if>
+		order by bp.id desc
+	</select>
+	<select id="getOne" resultType="com.lv.entity.BalancePay" parameterType="String">
+		select * from balance_pay where client_id=#{client_id}
+	</select>
+	<insert id="insert">
+		insert into BalancePay(lost_time,status,lost_date,freeze_amount_key,add_date,changenumber,account_no,freeze_amount,balance,balance_key,client_id,add_user,account_type)
+		 values(#{lost_time},#{status},#{lost_date},#{freeze_amount_key},#{add_date},#{changenumber},#{account_no},#{freeze_amount},#{balance},#{balance_key},#{client_id},#{add_user},#{account_type})
+	</insert>
+	<update id="update"  parameterType="com.lv.entity.BalancePay">
+		update balance_pay set date_ceiling=#{date_ceiling},date_proportion=#{date_proportion},balance_cash_date=#{balance_cash_date},balance_cash_cost=#{balance_cash_cost},one_max_money=#{one_max_money},date_proportion_release=#{date_proportion_release} where client_id=#{client_id}
+	</update>
+	<!-- 修改失败自动回款状态 -->
+	<update id="updateAuto"  parameterType="map">
+		UPDATE balance_pay SET auto_return=${auto_return} where client_id='${client_id}'
+	</update>
+	<!-- 修改商户余额状态 -->
+	<update id="updateStatus"  parameterType="map">
+		UPDATE balance_pay SET status=#{status} where client_id=#{client_id}
+	</update>
+	<!-- 修改商户利润状态 -->
+	<update id="updateProfitsStatus"  parameterType="map">
+		UPDATE balance_pay SET profits_status=#{profits_status} where client_id=#{client_id}
+	</update>
+	<!-- 修改账户余额展示 -->
+	<select id="selectBalance" resultType="map" parameterType="String">
+		SELECT bp.client_id,cb.agent_name,bp.account_no,bp.balance,bp.freeze_amount,bp.date_proportion,bp.date_ceiling FROM balance_pay bp LEFT JOIN agent cb ON bp.client_id = cb.agent_no WHERE bp.client_id=#{client_id}
+	</select>
+	<!-- 修改冻结金额展示 -->
+	<select id="selectFreeze" resultType="map" parameterType="String">
+		SELECT bp.client_id,cb.agent_name,bp.account_no,bp.balance,bp.freeze_amount FROM balance_pay bp LEFT JOIN agent cb ON bp.client_id = cb.agent_no WHERE bp.client_id=#{client_id}
+	</select>
+	<update id="updatePropor" parameterType="com.lv.entity.BalancePay">
+		UPDATE Balance_Pay SET date_proportion = '${date_proportion}' WHERE client_id = '${client_id}'
+	</update>
+	<update id="updateCeiling"  parameterType="com.lv.entity.BalancePay">
+		UPDATE Balance_Pay SET date_ceiling = '${date_ceiling}' WHERE client_id = '${client_id}'
+	</update>
+	
+	
+	
+</mapper> 
+

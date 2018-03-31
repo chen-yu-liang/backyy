@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChannelDetails">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT cs.*,cp.name,cdb.pro_name
+		FROM channel_details cs 
+		LEFT JOIN channel_parent cp ON cp.id = cs.c_pid 
+		LEFT JOIN 
+		(SELECT  GROUP_CONCAT(bp.pro_name) AS pro_name,cmp.c_id FROM channel_product_mapper cmp 
+		LEFT JOIN busi_product bp ON cmp.prono = bp.pro_no GROUP BY cmp.c_id) cdb	
+		ON cs.c_id = cdb.c_id 
+		WHERE 1=1
+		<if test="params.mch_id!=null and params.mch_id!=''">
+			and cs.mch_id = '${params.mch_id}'
+		</if>
+		<if test="params.c_pid!=null and params.c_pid!=''">
+			and cs.c_pid = '${params.c_pid}'
+		</if>
+		<if test="params.app_id!=null and params.app_id!=''">
+			and cs.app_id = '${params.app_id}'
+		</if>
+		<if test="params.c_level!=null and params.c_level!=''">
+			and cs.c_level = '${params.c_level}'
+		</if>
+		<if test="params.deal_type!=null and params.deal_type!=''">
+			and cs.deal_type = '${params.deal_type}'
+		</if>
+		<if test="params.settletype!=null and params.settletype!=''">
+			and cs.settletype = '${params.settletype}'
+		</if>
+		<if test="params.status!=null and params.status!=''">
+			and cs.status = '${params.status}'
+		</if>
+		<if test="params.c_type!=null and params.c_type!=''">
+			and cs.c_type = '${params.c_type}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ChannelDetails" parameterType="int">
+		select * from channel_details where c_id=#{id}
+	</select>
+	<!-- 根据渠道商户号查询 -->
+	<select id="getchannal" resultType="com.lv.entity.ChannelDetails" parameterType="String">
+		select * from channel_details where mch_id=#{mch_id}
+	</select>
+	<!-- 根据通道编号查询通道 -->
+	<select id="getPids" resultType="map" parameterType="map">
+		select * from channel_details where c_id in (${ids})
+	</select>
+		<!-- 查询所有商编 -->
+	<select id="getAllChannel" resultType="map" parameterType="map">
+		select * from channel_details 
+	</select>
+	<insert id="insert">
+	insert into channel_details(status,mch_id,c_pid,settleType,c_level,privatekey,c_name,dayCountMoney)
+	 values(0,#{mch_id},#{c_pid},#{settleType},#{c_level},#{privatekey},#{c_name},#{dayCountMoney})
+	</insert>
+	<update id="update"  parameterType="int">
+	update channel_details set status=#{status},mch_id=#{mch_id},c_pid=#{c_pid},settleType=#{settletype},c_level=#{c_level},c_name=#{c_name},dayCountMoney=#{dayCountMoney} where c_id=#{c_id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from channel_details where Id=#{id}
+	</delete>
+	<update id="updatestatus"  parameterType="map">
+	update channel_details set status=#{status} where c_id=#{c_id}
+	</update>
+</mapper> 
+

@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent
+END
+exceptionPage.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/exceptionPage.ftl
+END
+backlist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/backlist.ftl
+END
+paymessage.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/YYWeb/!svn/ver/27/backyy/WebRoot/views/Agent/paymessage.ftl
+END
+agentProduclist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/agentProduclist.ftl
+END
+changeAgentMessage.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/changeAgentMessage.ftl
+END
+checklist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/checklist.ftl
+END
+list.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/list.ftl
+END
+findpictrue.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/findpictrue.ftl
+END
+formallist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/YYWeb/!svn/ver/27/backyy/WebRoot/views/Agent/formallist.ftl
+END
+changeAgentRate.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/changeAgentRate.ftl
+END
+stoplist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/stoplist.ftl
+END
+applylist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/applylist.ftl
+END
+quickmark.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/quickmark.ftl
+END
+loginagent.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/loginagent.ftl
+END
+paidPay.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/paidPay.ftl
+END
+add.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/add.ftl
+END
+diyupload.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/Agent/diyupload.ftl
+END

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Rate">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from rate where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.Rate" parameterType="String">
+		select * from rate where id=#{id}
+	</select>
+	<!-- 查询所有费率 -->
+	<select id="getAll" resultType="map" >
+		select * from rate where status=1 
+	</select>
+		<!-- 查询商户可用的费率 -->
+	<select id="getAllClientRate" resultType="map" parameterType="com.lv.entity.RateInfo">
+		select r.* from rate r left join rate_info ri on r.rate_no = ri.rate_no where r.status=1
+		<if test="rate_args!=null and rate_args!=''">
+			and ri.rate_args >= '${rate_args}'
+		</if>
+	</select>
+	<insert id="insert">
+	insert into Rate(rate_name,rate_no,add_time,add_user)
+	 values(#{rate_name},#{rate_no},#{add_time},#{add_user})
+	</insert>
+	<update id="update"  parameterType="int">
+	update Rate set rate_name=#{rate_name},rate_no=#{rate_no},add_time=#{add_time},add_user=#{add_user} where Id=#{id}
+	</update>
+	<!-- 启停费率状态 -->
+	<update id="updownrate"  parameterType="int">
+	update Rate set status=#{status} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from rate where Id=#{id}
+	</delete>
+	<!-- 费率信息列表 -->
+	<select id="getRateList" resultType="map" parameterType="Page">
+		select r.*,ri.begin_amt,ri.end_amt,ri.rate_args from rate r left join rate_info ri ON r.rate_no=ri.rate_no where 1=1
+		<!-- 费率代号条件 -->
+		<if test="params.rate_no!=null and params.rate_no!=''">
+			and r.rate_no = '${params.rate_no}'
+		</if>
+		<!-- 费率名称条件 -->
+		<if test="params.rate_name!=null and params.rate_name!=''">
+			and r.rate_name = '${params.rate_name}'
+		</if>
+		<!-- 费率算法条件 -->
+		<if test="params.rate_args!=null and params.rate_args!=''">
+			and ri.rate_args = '${params.rate_args}'
+		</if>
+		<!-- 状态条件-->
+		<if test="params.status!=null and params.status!=''">
+			and r.status = '${params.status}'
+		</if>
+	</select>
+	<select id="getRate" resultType="map">
+		select * from rate where status=1 order by rate_no desc
+	</select>
+</mapper> 
+

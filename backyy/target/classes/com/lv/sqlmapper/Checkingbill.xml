@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Checkingbill">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from checkingbill where 1=1
+		<if test="params.client_no!=null and params.client_no!=''">
+			and client_no=#{params.client_no}
+		</if>		
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and trade_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and trade_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.Checkingbill" parameterType="int">
+		select * from checkingbill where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into Checkingbill(toal_money,trade_date,remark,txtname,toal_amount,add_date,client_no,trade_count,bill_no,toal_charge)
+	 values(#{toal_money},#{trade_date},#{remark},#{txtname},#{toal_amount},#{add_date},#{client_no},#{trade_count},#{bill_no},#{toal_charge})
+	</insert>
+	<update id="update"  parameterType="int">
+	update Checkingbill set toal_money=#{toal_money},trade_date=#{trade_date},remark=#{remark},txtname=#{txtname},toal_amount=#{toal_amount},add_date=#{add_date},client_no=#{client_no},trade_count=#{trade_count},bill_no=#{bill_no},toal_charge=#{toal_charge} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from checkingbill where Id=#{id}
+	</delete>
+</mapper> 
+

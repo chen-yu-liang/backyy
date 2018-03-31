@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChannelParent">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from channel_parent where 1=1
+		<if test="params.id!=null and params.id!=''">
+			and id = '${params.id}'
+		</if>
+		<if test="params.name!=null and params.name!=''">
+			and name like '%${params.name}%'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ChannelParent" parameterType="int">
+		select * from channel_parent where id=#{id}
+	</select>
+	<!-- 查询所有的通道 -->
+	<select id="getParentList" resultType="map" >
+		select * from channel_parent 
+	</select>
+	<insert id="insert">
+	insert into channel_parent(level,name,id,status)
+	 values(#{level},#{name},#{id},#{status})
+	</insert>
+	<update id="update"  parameterType="int">
+	update channel_parent set level=#{level},name=#{name},status=#{status} where id=#{id}
+	</update>
+	<!-- 添加app_id -->
+	<update id="updateAppid"  parameterType="com.lv.entity.ChannelParent">
+	update channel_parent set app_id=#{app_id} where id=#{id}
+	</update>
+	<!-- 添加秘钥 -->
+	<update id="updateKey"  parameterType="com.lv.entity.ChannelParent">
+	update channel_parent set db_public_key=#{db_public_key},db_private_key=#{db_private_key},public_key=#{public_key} where id=#{id}
+	</update>	
+	<delete id="delete" parameterType="int">
+		delete from channel_parent where id=#{id}
+	</delete>
+</mapper> 
+

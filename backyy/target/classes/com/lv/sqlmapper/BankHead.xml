@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BankHead">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from bank_head where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.BankHead" parameterType="int">
+		select * from bank_head where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into BankHead(bank_num,bank_name,grade)
+	 values(#{bank_num},#{bank_name},#{grade})
+	</insert>
+	<update id="update"  parameterType="int">
+	update BankHead set bank_num=#{bank_num},bank_name=#{bank_name},grade=#{grade} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from bank_head where Id=#{id}
+	</delete>
+	<!--获取总行名称 grade=0 -->
+	<select id="selectbank_name" resultType="map">
+		select bank_name,bank_num from bank_head where grade=0
+	</select>	
+</mapper> 
+

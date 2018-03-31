@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MarkCardTotal">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from mark_card_total where 1=1
+		<if test="params.mark_batch_no!=null and params.mark_batch_no!=''">
+			and mark_batch_no = '${params.mark_batch_no}'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and agent_no = '${params.agent_no}'
+		</if>
+		<if test="params.mark_client_no_start_num!=null and params.mark_client_no_start_num!=''">
+			and mark_client_no_start_num <![CDATA[>= ]]>  '${params.mark_client_no_start_num}'
+		</if>
+		<if test="params.mark_client_no_end_num!=null and params.mark_client_no_end_num!=''">
+			and mark_client_no_end_num <![CDATA[<= ]]> '${params.mark_client_no_end_num}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and mark_add_time <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and mark_add_time <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.MarkCardTotal" parameterType="int">
+		select * from mark_card_total where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into mark_card_total(mark_client_no_start_num,mark_batch_no,mark_card_num,mark_client_no_end_num,mark_add_time,agent_no)
+	 values(#{mark_client_no_start_num},#{mark_batch_no},#{mark_card_num},#{mark_client_no_end_num},#{mark_add_time},#{agent_no})
+	</insert>
+	<update id="update"  parameterType="int">
+	update mark_card_total set mark_client_no_start_num=#{mark_client_no_start_num},mark_batch_no=#{mark_batch_no},mark_card_num=#{mark_card_num},mark_client_no_end_num=#{mark_client_no_end_num},mark_add_time=#{mark_add_time},agent_no=#{agent_no} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from mark_card_total where Id=#{id}
+	</delete>
+	<!-- 获得最大商户号 -->
+	<select id="getMarkClientNO" resultType="int" parameterType="int">
+		select max(mark_client_no_end_num) from mark_card_total 
+	</select>
+	<!-- 获得分卡最大批次号 -->
+	<select id="getMaxMarkBatchNo" resultType="String" parameterType="String">
+		select max(mark_batch_no) from mark_card_total where mark_add_time=#{day}
+	</select>
+<!--汇总 -->
+	<select id="getcountList" resultType="map" parameterType="Page">
+		select sum(mark_card_num) mcn from mark_card_total where 1=1
+		<if test="mark_batch_no!=null and mark_batch_no!=''">
+			and mark_batch_no = '${mark_batch_no}'
+		</if>
+		<if test="agent_no!=null and agent_no!=''">
+			and agent_no = '${agent_no}'
+		</if>
+		<if test="mark_client_no_start_num!=null and mark_client_no_start_num!=''">
+			and mark_client_no_start_num <![CDATA[>= ]]>  '${mark_client_no_start_num}'
+		</if>
+		<if test="mark_client_no_end_num!=null and mark_client_no_end_num!=''">
+			and mark_client_no_end_num <![CDATA[<= ]]> '${mark_client_no_end_num}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="begintime!=null and begintime!=''">
+			and mark_add_time <![CDATA[>= ]]> '${begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="endtime!=null and endtime!=''">
+			and mark_add_time <![CDATA[<= ]]> '${endtime}'
+		</if>
+	</select>	
+</mapper> 
+

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Agent">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from agent where 1=1
+		<if test="params.status!=null and params.status!=''">
+			and status = '${params.status}'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and agent_no = '${params.agent_no}'
+		</if>
+		<if test="params.agent_name!=null and params.agent_name!=''">
+			and agent_name like '%${params.agent_name}%'
+		</if>
+		<if test="params.agent_level!=null and params.agent_level!=''">
+			and agent_level = '${params.agent_level}'
+		</if>
+		<if test="params.rate_no!=null and params.rate_no!=''">
+			and rate_no = '${params.rate_no}'
+		</if>
+		<if test="params.person!=null and params.person!=''">
+			and person = '${params.person}'
+		</if>
+		<if test="params.agent_style!=null and params.agent_style!=''">
+			and agent_style = '${params.agent_style}'
+		</if>
+		<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and add_date <![CDATA[>= ]]> '${params.begintime}'
+		</if>
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and add_date <![CDATA[<= ]]> '${params.endtime}'
+		</if>
+		order by add_date desc
+	</select>
+	<!-- 机构产品 -->
+	<select id="Get" resultType="map" parameterType="Page">
+		select * from (
+		SELECT cpd.c_bid,c.c_name,c.c_status,cp.name,dd.c_objectno,dd.agent_name,cpd.c_pid,cp.id FROM channel_pool_details cpd
+		LEFT JOIN channel_pool c ON c.c_id = cpd.c_pid 
+		LEFT JOIN channel_details cd ON cd.c_id = cpd.c_bid 
+		LEFT JOIN channel_parent cp ON cd.c_pid = cp.id
+		LEFT JOIN (SELECT * FROM channel_pool_mapper cpm LEFT JOIN agent a ON a.agent_no = cpm.c_objectno) dd ON dd.c_pid=cpd.c_pid
+	    WHERE dd.agent_style = 1
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and dd.agent_no = '${params.agent_no}'
+		</if>
+		<if test="params.id!=null and params.id!=''">
+			and cp.id = '${params.id}'
+		</if>
+		GROUP BY cpd.c_pid ) be
+	</select>
+	<select id="agentProduclist" resultType="map" parameterType="Page">
+		SELECT * FROM
+		(
+		SELECT 
+		a.agent_name ,
+		a.agent_no ,
+		f.channel_product_name ,
+		d.t_bid ,
+		e.name,
+		d.c_bid,
+		GROUP_CONCAT(c.c_id)
+		FROM agent a
+		LEFT JOIN channel_pool_mapper b ON b.c_objectno = a.agent_no
+		LEFT JOIN channel_pool c ON c.c_id = b.c_pid
+		LEFT JOIN channel_pool_details d ON d.c_pid = c.c_id
+		LEFT JOIN channel_parent e ON e.id = d.t_bid
+		LEFT JOIN channel_product f ON f.t_id = e.id
+		WHERE 1=1
+		AND b.c_type = 2
+		AND a.agent_style = 1
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and a.agent_no = '${params.agent_no}'
+		</if>
+		<if test="params.id!=null and params.id!=''">
+			and e.id = '${params.id}'
+		</if>
+		<!-- 
+		and a.agent_no = 100497
+		OR b.c_pid in (1000) 
+		--> 
+		GROUP BY a.agent_no,e.id, f.channel_product_name,e.`name`
+		ORDER BY a.agent_no,f.channel_product_name
+		) be
+	</select>
+	<!--代理商申请-->
+	<select id="applylist" resultType="map" parameterType="Page">
+		select * from agent where  status=0
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and agent_no = '${params.agent_no}'
+		</if>
+		<if test="params.agent_name!=null and params.agent_name!=''">
+			and agent_name like '%${params.agent_name}%'
+		</if>
+		<if test="params.agent_level!=null and params.agent_level!=''">
+			and agent_level = '${params.agent_name}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.Agent" parameterType="int">
+		select * from agent where agent_no=#{id}
+	</select>
+	<select id="getAnAgent" resultType="com.lv.entity.Agent" parameterType="map">
+		select * from agent where agent_no=#{agent_no}
+	</select>
+	<insert id="insert">
+		insert into agent(person,add_date,card_no,city,province,area,agent_no,add_user,agent_name,agent_uuid,mobile,belong_agent,agent_level,agent_style,pay_key)
+		 values(#{person},#{add_date},#{card_no},#{city},#{province},#{area},#{agent_no},#{add_user},#{agent_name},#{agent_uuid},#{mobile},#{belong_agent},#{agent_level},#{agent_style},#{pay_key})
+	</insert>
+	<update id="update"  parameterType="int">
+		update agent set agent_level=#{agent_level},person=#{person},card_no=#{card_no},city=#{city},province=#{province},agent_name=#{agent_name},agent_uuid=#{agent_uuid},mobile=#{mobile},belong_agent=#{belong_agent},agent_style=#{agent_style} where agent_no=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from agent where agent_no=#{id}
+	</delete>
+	<!-- 修改状态 -->
+	<update id="updatestatus"  parameterType="map">
+		update agent set status=#{status} where agent_no=#{id}
+	</update>
+	<!--获得所有正式代理商-->
+	<select id="getAgentList" resultType="map" >
+		select * from agent where  status=2
+	</select>
+		<!--获得所有正式代理商-->
+	<select id="getMarkAgent" resultType="map" >
+		select * from agent where  status=2
+	</select>
+	<!-- 查询最大商户号 -->
+	<select id="getoneagent" resultType="String" >
+		select max(agent_no) from agent 
+	</select>
+	<!-- 查询联行名称-->
+	<select id="findBankNameByNo" resultType="String" >
+		select bank_name from bank_head where bank_num=#{bank_num}
+	</select>
+	<!-- 查询商户信息 -->
+	<select id="getAgent" resultType="com.lv.entity.Agent" parameterType="String">
+		select * from agent where agent_no=#{agent_no}
+	</select>
+		<!-- 查询所有代理商 -->
+	<select id="getAllAgent" resultType="map" >
+		select * from agent 
+	</select>
+	<!-- 修改商户费率 -->
+	<update id="updateRate"  parameterType="map">
+		update agent set rate_no=#{rate_no} where agent_no=#{agent_no}
+	</update>
+		<!-- 修改代付地址 -->
+	<update id="updatePay"  parameterType="map">
+		update agent set pay_push_ip=#{pay_push_ip},pay_push_port=#{pay_push_port} where agent_no=#{agent_no}
+	</update>
+	<!-- 查询代理商等级 -->
+	<select id="getAgentLevel" parameterType="map" resultType="map" >
+		select (agent_level+1) as agent_level  from agent where status=2 and agent_no = #{belong_agent}
+	</select>
+		<!-- 修改变更手机号 -->
+	<update id="ChangeAgentMessage"  parameterType="map">
+		update agent set mobile=#{mobile} where agent_no=#{agent_no}
+	</update>	
+</mapper> 
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BankRequestdata">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select br.*,cb.client_no,cb.client_name,a.account_name,a.account_card_no,a.account_bank_name from bank_requestdata br 
+		left join deal_record dr on dr.serial = br.serial
+		left join client_base cb on cb.client_no = dr.client_no
+		left join accounts a on a.object_id = cb.client_no
+		where 1=1
+		<if test="params.serial!=null and params.serial!=''">
+			and br.serial = '${params.serial}'
+		</if>
+				<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			and substr(br.localdate,1,10) <![CDATA[>= ]]> '${params.begintime}'
+		</if>	
+		<!-- 到   日期yyyy-MM-dd-->
+		<if test="params.endtime!=null and params.endtime!=''">
+			and substr(br.localdate,1,10) <![CDATA[<= ]]> '${params.endtime}'
+		</if>		
+	</select>
+	<select id="getOne" resultType="com.lv.entity.BankRequestdata" parameterType="int">
+		select * from bank_requestdata where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into BankRequestdata(amount,mch_id,service,localdate,serial,bid)
+	 values(#{amount},#{mch_id},#{service},#{localdate},#{serial},#{bid})
+	</insert>
+	<update id="update"  parameterType="int">
+	update BankRequestdata set amount=#{amount},mch_id=#{mch_id},service=#{service},localdate=#{localdate},serial=#{serial},bid=#{bid} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from bank_requestdata where Id=#{id}
+	</delete>
+</mapper> 
+

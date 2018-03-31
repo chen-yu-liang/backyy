@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ChannelParent
+END
+list.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/YYWeb/!svn/ver/26/backyy/WebRoot/views/ChannelParent/list.ftl
+END
+addkey.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ChannelParent/addkey.ftl
+END
+addappid.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ChannelParent/addappid.ftl
+END
+add.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ChannelParent/add.ftl
+END

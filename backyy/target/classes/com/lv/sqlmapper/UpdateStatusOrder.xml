@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UpdateStatusOrder">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from update_status_order where 1=1
+		<if test="params.update_type!=null and params.update_type!=''">
+			and update_type = '${params.update_type}'
+		</if>
+		<if test="params.audit_status!=null and params.audit_status!=''">
+			and audit_status = '${params.audit_status}'
+		</if>
+		<if test="params.submit_people!=null and params.submit_people!=''">
+			and submit_people like '%${params.submit_people}%'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.UpdateStatusOrder" parameterType="int">
+		select * from update_status_order where Id=#{id}
+	</select>
+	<insert id="insert">
+INSERT INTO update_status_order(update_type,tran_seq,old_status,new_status,submit_info,submit_people)
+VALUES(#{update_type},#{tran_seq},#{old_status},#{new_status},#{submit_info},#{submit_people})		
+	</insert>
+	<update id="update"  parameterType="int">
+	UPDATE update_status_order SET audit_status=#{audit_status},audit_info=#{audit_info},audit_date=#{audit_date},audit_people=#{audit_people} where id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from update_status_order where Id=#{id}
+	</delete>
+</mapper> 
+

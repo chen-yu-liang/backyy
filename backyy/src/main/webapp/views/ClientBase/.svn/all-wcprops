@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase
+END
+list.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/list.ftl
+END
+backlist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/backlist.ftl
+END
+findpictrue.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/findpictrue.ftl
+END
+formallist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/YYWeb/!svn/ver/27/backyy/WebRoot/views/ClientBase/formallist.ftl
+END
+changeChannel.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/changeChannel.ftl
+END
+paymessage.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/YYWeb/!svn/ver/28/backyy/WebRoot/views/ClientBase/paymessage.ftl
+END
+changeClientRate.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/changeClientRate.ftl
+END
+applylist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/applylist.ftl
+END
+stoplist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/stoplist.ftl
+END
+getbaidumap.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/getbaidumap.ftl
+END
+add.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/YYWeb/!svn/ver/15/backyy/WebRoot/views/ClientBase/add.ftl
+END
+checklist.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/checklist.ftl
+END
+diyupload.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/YYWeb/!svn/ver/4/backyy/WebRoot/views/ClientBase/diyupload.ftl
+END

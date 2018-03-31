@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BalancePayAll">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT ba.serial_id,ba.amount_before,ba.id,ba.client_no,ba.amount,ba.amount_after,ba.operation,ba.add_date,ba.operation_remark,cb.client_name,a.agent_name 
+		FROM balance_pay_all ba 
+		LEFT JOIN client_base cb ON ba.client_no = cb.client_no 
+		LEFT JOIN agent a ON ba.client_no = a.agent_no 
+		WHERE 1=1
+		<if test="params.serial_id!=null and params.serial_id!=''">
+			and ba.serial_id = '${params.serial_id}'
+		</if>
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and ba.client_no = '${params.agent_no}'
+		</if>
+		<if test="params.operation!=null and params.operation!=''">
+			and ba.operation = '${params.operation}'
+		</if>
+			<!-- 从  日期yyyy-MM-dd -->
+		<if test="params.begintime!=null and params.begintime!=''">
+			<!-- 到   日期yyyy-MM-dd-->
+			<if test="params.endtime!=null and params.endtime!=''">
+				and DATE(ba.add_date) <![CDATA[>= ]]> '${params.begintime}' and DATE(ba.add_date) <![CDATA[<= ]]> '${params.endtime}'
+			</if>
+			<if test="params.endtime == null or params.endtime ==''">
+				and DATE(ba.add_date) <![CDATA[= ]]> '${params.begintime}' 
+			</if>
+		</if>
+		order by ba.id desc
+	</select>
+	<select id="getOne" resultType="com.lv.entity.BalancePayAll" parameterType="int">
+		select * from balance_pay_all where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into BalancePayAll(operation_remark,ordinal,add_date,client_no,userinfo,amount_after,account_no,serial_id,amount,amount_before,operation,amount_before_key,amount_after_key)
+	 values(#{operation_remark},#{ordinal},#{add_date},#{client_no},#{userinfo},#{amount_after},#{account_no},#{serial_id},#{amount},#{amount_before},#{operation},#{amount_before_key},#{amount_after_key})
+	</insert>
+	<update id="update"  parameterType="int">
+	update BalancePayAll set operation_remark=#{operation_remark},ordinal=#{ordinal},add_date=#{add_date},client_no=#{client_no},userinfo=#{userinfo},amount_after=#{amount_after},account_no=#{account_no},serial_id=#{serial_id},amount=#{amount},amount_before=#{amount_before},operation=#{operation},amount_before_key=#{amount_before_key},amount_after_key=#{amount_after_key} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from balance_pay_all where Id=#{id}
+	</delete>
+</mapper> 
+

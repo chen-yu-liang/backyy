@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IpWhitelist">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select iw.*, a.agent_name from ip_whitelist iw left join  agent a on a.agent_no = iw.agent_no 
+		where 1=1
+		<if test="params.agent_no!=null and params.agent_no!=''">
+			and iw.agent_no = '${params.agent_no}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.IpWhitelist" parameterType="int">
+		select * from ip_whitelist where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into ip_whitelist(status,agent_no,ip,sys_no)
+	 values(#{status},#{agent_no},#{ip},#{sys_no})
+	</insert>
+	<update id="update"  parameterType="int">
+	update ip_whitelist set status=#{status},agent_no=#{agent_no},ip=#{ip},sys_no=#{sys_no} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from ip_whitelist where Id=#{id}
+	</delete>
+</mapper> 
+

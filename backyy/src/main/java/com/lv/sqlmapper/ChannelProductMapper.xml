@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChannelProductMapper">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		SELECT cpm.*,bp.pro_name,cd.c_name,cp.name FROM channel_product_mapper cpm
+		LEFT JOIN busi_product bp ON cpm.prono = bp.pro_no
+		LEFT JOIN channel_details cd ON cd.c_id = cpm.c_id
+		LEFT JOIN channel_parent cp ON cd.c_pid = cp.id
+		where 1=1
+		<if test="params.c_id!=null and params.c_id!=''">
+			and cpm.c_id = '${params.c_id}'
+		</if>
+		<if test="params.prono!=null and params.prono!=''">
+			and cpm.prono = '${params.prono}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.ChannelProductMapper" parameterType="int">
+		select * from channel_product_mapper where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into channel_product_mapper(createtime,pattern,prono,status,service,c_id,rate,minMoney,maxMoney)
+	 values(now(),#{pattern},#{prono},#{status},#{service},#{c_id},#{rate},#{minMoney},#{maxMoney})
+	</insert>
+	<update id="update"  parameterType="int">
+	update channel_product_mapper set pattern=#{pattern},prono=#{prono},status=#{status},service=#{service},c_id=#{c_id},rate=#{rate},minMoney=#{minMoney},maxMoney=#{maxMoney} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from channel_product_mapper where Id=#{id}
+	</delete>
+</mapper> 
+

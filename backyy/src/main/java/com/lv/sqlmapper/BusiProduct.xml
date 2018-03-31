@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BusiProduct">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from busi_product where 1=1
+		<if test="params.pro_no!=null and params.pro_no!=''">
+			and pro_no = '${params.pro_no}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.lv.entity.BusiProduct" parameterType="int">
+		select * from busi_product where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into busi_product(pro_name,createtime,pro_service,pro_no)
+	 values(#{pro_name},NOW(),#{pro_service},#{pro_no})
+	</insert>
+	<update id="update"  parameterType="int">
+	update busi_product set pro_name=#{pro_name},pro_service=#{pro_service},pro_no=#{pro_no} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from busi_product where Id=#{id}
+	</delete>
+	<!-- 获得全部产品 -->
+	<select id="getbusiProduct" resultType="map">
+		select * from busi_product
+	</select>
+</mapper> 
+
